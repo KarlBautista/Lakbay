@@ -12,7 +12,7 @@ const DashBoard = () => {
     <div className='min-h-screen w-full flex flex-col'>
       <Header />
       <div className='flex h-[90%] w-full'>
-        <div className='flex flex-col bg-[#F8F9FA] w-[18%] px-5 py-5 gap-5'> 
+        <div className='flex flex-col bg-[#F0F6FF] w-[18%] px-5 py-5 gap-5  border-r-5 border-r-[#FFDA3E] border-b-5 border-b-[#FFDA3E]'> 
             <div className=''>
             <SearchBar />
            </div>
@@ -32,7 +32,7 @@ const DashBoard = () => {
         </div>
       
     
-        <div className='flex-1 flex items-center justify-center min-h-[400px] bg-[#F8F9FA] backdrop-blur-md shadow-lg border border-white/20'>
+        <div className='flex-1 flex items-center justify-center min-h-[400px] bg-[#D64545] backdrop-blur-md shadow-lg border border-white/20'>
           <Map />
         </div>
       </div>

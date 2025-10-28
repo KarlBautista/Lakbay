@@ -66,7 +66,7 @@ function Map() {
   }
 
   return (
-    <div id="map" className="w-[99%] h-[90%] rounded-2xl" />
+    <div id="map" className="w-full h-[99%] " />
   );
 }
 
