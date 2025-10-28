@@ -4,7 +4,10 @@ import Categories from '../components/Categories'
 import SearchBar from '../components/SearchBar'
 import Header from '../components/Header'
 import PlaceInformation from '../components/PlaceInformation'
+import useMap from '../components/LakbayZustand'
+import Loading from "../assets/loading.gif"
 const DashBoard = () => {
+  const { informationOfThePlace, isLoading } = useMap();
   return (
     <div className='min-h-screen w-full flex flex-col'>
       <Header />
@@ -17,9 +20,14 @@ const DashBoard = () => {
           <div>
             <Categories />
           </div>
+          { isLoading && <div className='w-full h-[50%] flex justify-center items-center'>
+              <img src={Loading} alt="loading" className='w-[50px] h-[50px]' />
+            </div>}
+          {informationOfThePlace &&
           <div>
             <PlaceInformation />
-          </div>
+          </div> 
+            }
         </div>
       
     

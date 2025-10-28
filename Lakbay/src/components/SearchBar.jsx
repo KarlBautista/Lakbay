@@ -4,7 +4,7 @@ import useMap from './LakbayZustand';
 const SearchBar = () => {
   const geoapifyAPI = import.meta.env.VITE_GEOAPIFY_API_KEY;
   const [search, setSearch] = useState("");
-  const { storePointOfPlaces } = useMap();
+  const { storePointOfPlaces, clearInformationOfThePlace, setIsLoading } = useMap();
   const fetchData = async () => {
     const response = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${search}&filter=circle:120.9842,14.5995,10000&apiKey=${geoapifyAPI}`)
     return response.json();
@@ -20,6 +20,7 @@ const SearchBar = () => {
   const searchPlace = () => {
     if(search.trim() === "") return;
     refetch();
+    clearInformationOfThePlace();
   }
 
   if(error){
@@ -28,9 +29,16 @@ const SearchBar = () => {
 
   useEffect(() => {
     if(data){
+        setIsLoading(false);
         storePointOfPlaces(data.features);
     }
   }, [data]);
+
+  useEffect(() => {
+    if(isLoading){
+      setIsLoading(isLoading)
+    }
+  }, [isLoading])
   
   return (
     <div className='flex flex-col gap-3'>
@@ -42,7 +50,6 @@ const SearchBar = () => {
             />
         <button onClick={() => searchPlace()}
             className='bg-[#D64545] text-white rounded-sm p-2 hover:cursor-pointer'>Search</button>
-        {isLoading && <div>Loading.....</div>}
     </div>
 
   )

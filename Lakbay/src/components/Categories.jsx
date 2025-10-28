@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query';
 import useMap from './LakbayZustand';
+
 const Categories = () => {
   const [selected, setSelected] = useState("");
   const geoapifyAPI = import.meta.env.VITE_GEOAPIFY_API_KEY;
-  const { storePointOfPlaces } = useMap();
+  const { storePointOfPlaces, clearInformationOfThePlace, setIsLoading } = useMap();
 
   const fetchData = async () => {
+        clearInformationOfThePlace();
         const response = await fetch(`https://api.geoapify.com/v2/places?categories=${selected}&filter=circle:120.9842,14.5995,10000&limit=50&apiKey=${geoapifyAPI}`);
         return response.json();
     }
@@ -24,8 +26,15 @@ const Categories = () => {
   useEffect(() => {
     if(data){
       storePointOfPlaces(data.features);
+      setIsLoading(false);
     }
   }, [data]);
+
+  useEffect(() => {
+    if(isLoading){
+      setIsLoading(isLoading);
+    }
+  }, [isLoading]);
 
 
   return (
@@ -49,8 +58,6 @@ const Categories = () => {
             <option value="commercial.books">Commercial / Books</option>
             <option value="commercial.gift_and_souvenir">Commercial / Gift and souvenir</option>
         </select>
-
-        { isLoading && <div>Loading....</div> }
     </div>
   )
 }

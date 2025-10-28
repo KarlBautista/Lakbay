@@ -4,7 +4,7 @@ const PlaceInformation = () => {
   const { informationOfThePlace } = useMap();
   console.log(informationOfThePlace)
   return (
-    <div className='flex flex-col gap-4 border w-full h-130 px-5 py-5 items-center justify-center rounded-sm'>
+    <div className='flex flex-col gap-4 border w-full h-130 px-5 py-5 items-center rounded-sm'>
         <div>
              <h2 className='font-semibold'>{informationOfThePlace?.properties?.name}</h2>
         </div>
