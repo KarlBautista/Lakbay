@@ -28,15 +28,15 @@ const Categories = () => {
   }, [data]);
 
 
-
-
- 
-
-   
-
   return (
     <div>
-        <select name="selected" id="" value={selected} onChange={(e) => setSelected(e.target.value)}>
+        <select 
+          name="selected" 
+          id="" 
+          value={selected} 
+          onChange={(e) => setSelected(e.target.value)}
+          className="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#D64545] focus:border-[#D64545] outline-none transition-all duration-200 text-gray-700 cursor-pointer hover:border-gray-400"
+        >
             <option value="">Select Category of Places</option>
            <option value="commercial">Commercial</option>
             <option value="commercial.supermarket">Commercial / Supermarket</option>

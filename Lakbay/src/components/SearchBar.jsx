@@ -1,15 +1,50 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import useMap from './LakbayZustand';
 const SearchBar = () => {
   const geoapifyAPI = import.meta.env.VITE_GEOAPIFY_API_KEY;
+  const [search, setSearch] = useState("");
+  const { storePointOfPlaces } = useMap();
   const fetchData = async () => {
-    const response = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=sm manla&filter=circle:120.9842,14.5995,10000&apiKey=${geoapifyAPI}
-`)
+    const response = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${search}&filter=circle:120.9842,14.5995,10000&apiKey=${geoapifyAPI}`)
+    return response.json();
   }
+  const { data, error, isLoading, refetch} = useQuery({
+    queryKey: ["searchedPlaces", search],
+    queryFn: () => fetchData(),
+    enabled: false,
+    refetch: false,
+    retry: false,
+  });
+
+  const searchPlace = () => {
+    if(search.trim() === "") return;
+    refetch();
+  }
+
+  if(error){
+    throw new Error("Error fetching data: ", error);
+  }
+
+  useEffect(() => {
+    if(data){
+        storePointOfPlaces(data.features);
+    }
+  }, [data]);
+  
   return (
-    <div>
-      <input type="text" className='px-4 py-4 border-lg' placeholder='Search Places'/>
+    <div className='flex flex-col gap-3'>
+      <input type="text" 
+            className='p-3 border border-gray-300 rounded-sm focus:border-[#D64545] outline-none' 
+            placeholder='Search Places'
+            onChange={e => setSearch(e.target.value)}
+            value={search}
+            />
+        <button onClick={() => searchPlace()}
+            className='bg-[#D64545] text-white rounded-sm p-2 hover:cursor-pointer'>Search</button>
+        {isLoading && <div>Loading.....</div>}
     </div>
+
   )
 }
 
