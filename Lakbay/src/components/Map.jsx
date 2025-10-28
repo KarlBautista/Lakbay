@@ -59,6 +59,10 @@ function Map() {
 
   const handlePlaceInformation = (place) => {
     storeInformationOfThePlace(place);
+     mapRef.current.flyTo([place.geometry.coordinates[1], place.geometry.coordinates[0]], 16, {
+      animate: true,
+      duration: 1.5,
+    })
   }
 
   return (

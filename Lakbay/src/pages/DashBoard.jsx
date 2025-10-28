@@ -23,11 +23,12 @@ const DashBoard = () => {
           { isLoading && <div className='w-full h-[50%] flex justify-center items-center'>
               <img src={Loading} alt="loading" className='w-[50px] h-[50px]' />
             </div>}
-          {informationOfThePlace &&
+        { informationOfThePlace &&
           <div>
             <PlaceInformation />
           </div> 
-            }
+        }
+            
         </div>
       
     
