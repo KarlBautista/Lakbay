@@ -4,9 +4,10 @@ import useMap from './LakbayZustand';
 const SearchBar = () => {
   const geoapifyAPI = import.meta.env.VITE_GEOAPIFY_API_KEY;
   const [search, setSearch] = useState("");
-  const { storePointOfPlaces, clearInformationOfThePlace, setIsLoading } = useMap();
+  const { storePointOfPlaces, clearInformationOfThePlace, setIsLoading, userLocation} = useMap();
+ 
   const fetchData = async () => {
-    const response = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${search}&filter=circle:120.9842,14.5995,10000&apiKey=${geoapifyAPI}`)
+    const response = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${search}&filter=circle:${userLocation[1]},${userLocation[0]},10000&apiKey=${geoapifyAPI}`)
     return response.json();
   }
   const { data, error, isLoading, refetch} = useQuery({

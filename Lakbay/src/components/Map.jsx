@@ -2,25 +2,26 @@ import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import useMap from "./LakbayZustand";
-
+import gpsIcon from "../assets/gps.png"
 function Map() {
     const mapRef = useRef(null);
     const pointOfPlacesMarker = useRef([]);
-    const { pointOfPlaces, storeInformationOfThePlace } = useMap(); 
+    const userLocationRef = useRef([]);
+    const userMarkerRef = useRef(null);
+    const { pointOfPlaces, storeInformationOfThePlace, storeUserLocation } = useMap(); 
     const philippineBounds = L.latLngBounds(
       [4.6, 116.7],
-      [21.3, 126,6]
+      [21.3, 126.6]
     )
-    console.log(pointOfPlaces);
     useEffect(() => {
-     mapRef.current = L.map("map").setView([14.5995, 120.9842], 13) //Sa manila muna to, wala pa yung location mo eh
-     .setMaxBounds(philippineBounds)
+    getLocation();
+     mapRef.current = L.map("map").setMaxBounds(philippineBounds)
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       minZoom: 8,
     }).addTo(mapRef.current);
      
-
+    
     return () => {
       mapRef.current.remove();
     };
@@ -28,7 +29,7 @@ function Map() {
 
   useEffect(() => {
     const displayPointOfPlaces = () => {
-      if(pointOfPlacesMarker.current && pointOfPlacesMarker.current.length > 0){
+      if(pointOfPlacesMarker.current){
         pointOfPlacesMarker.current.forEach((place) => {
           mapRef.current.removeLayer(place);
         })
@@ -41,6 +42,7 @@ function Map() {
         .addTo(mapRef.current)
         .bindTooltip(place.properties?.name || "Unknown Place", {
           permanent: true,
+          timeout: 15000,
           direction: "top",
           offset: [0, -10],
 
@@ -57,16 +59,73 @@ function Map() {
   }
   }, [pointOfPlaces]);
 
-  const handlePlaceInformation = (place) => {
+  
+  const handlePlaceInformation = async (place) => {
     storeInformationOfThePlace(place);
      mapRef.current.flyTo([place.geometry.coordinates[1], place.geometry.coordinates[0]], 16, {
       animate: true,
       duration: 1.5,
-    })
+    });
   }
 
+
+  const getLocation = () => {
+    navigator.geolocation.getCurrentPosition(show, error, {
+      enableHighAccuracy: true,
+      maximumAge: 0,
+    });
+ 
+  }
+
+  const show = (position) => {
+    const lat = position.coords.latitude;
+    const lng = position.coords.longitude;
+    storeUserLocation(lat, lng);
+    console.log(lat, lng)
+    userLocationRef.current = [lat, lng];
+    if(mapRef.current){
+       mapRef.current.setView([lat, lng], 15);
+      if(userMarkerRef.current){
+        mapRef.current.removeLayer(userMarkerRef.current)
+      }
+      userMarkerRef.current = L.marker([lat, lng]).bindTooltip("You are here!", {
+        permanent: true,
+        direction: "top",
+        offset: [0, -10]
+       }).on("click", () => { 
+        mapRef.current.flyTo([lat, lng], 16, {
+        animate: true,
+        duration: 1.5,
+       
+       })
+    })
+       .addTo(mapRef.current);
+    } 
+  }
+
+  const error = (error) => {
+    console.log(error);
+  }
+
+
+
+ 
+
+
+
   return (
-    <div id="map" className="w-full h-[99%] " />
+ 
+    <div className="relative w-full h-full">
+      <div id="map" className="w-full h-[99%] z-0" />
+      <button className="absolute bottom-20 right-15 z-10 p-5 rounded-full bg-white cursor-pointer
+        hover:border" title="Get my location" onClick={() => getLocation()}>
+        <img src={gpsIcon} alt="" className="w-15 h-15"/>
+      </button>
+    </div>
+     
+   
+   
+  
   );
 }
 

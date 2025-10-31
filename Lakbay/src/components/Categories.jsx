@@ -5,11 +5,11 @@ import useMap from './LakbayZustand';
 const Categories = () => {
   const [selected, setSelected] = useState("");
   const geoapifyAPI = import.meta.env.VITE_GEOAPIFY_API_KEY;
-  const { storePointOfPlaces, clearInformationOfThePlace, setIsLoading } = useMap();
+  const { storePointOfPlaces, clearInformationOfThePlace, setIsLoading, userLocation } = useMap();
 
   const fetchData = async () => {
         clearInformationOfThePlace();
-        const response = await fetch(`https://api.geoapify.com/v2/places?categories=${selected}&filter=circle:120.9842,14.5995,10000&limit=50&apiKey=${geoapifyAPI}`);
+        const response = await fetch(`https://api.geoapify.com/v2/places?categories=${selected}&filter=circle:${userLocation[1]},${userLocation[0]},10000&limit=50&apiKey=${geoapifyAPI}`);
         return response.json();
     }
   const { data, error, isLoading } = useQuery({
@@ -18,6 +18,8 @@ const Categories = () => {
     enabled: !!selected,
     retry: false,
   });
+
+  
 
   if(error){
     throw new Error("Error fetching data: ", error);

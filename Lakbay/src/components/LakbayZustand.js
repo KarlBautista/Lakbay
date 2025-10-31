@@ -1,6 +1,7 @@
 import { create } from "zustand";
 
 const useMap = create((set) => ({
+    userLocation: null,
     pointOfPlaces: null,
     informationOfThePlace: null,
     isLoading: false,
@@ -8,6 +9,7 @@ const useMap = create((set) => ({
     storeInformationOfThePlace: (place) => set(() => ({ informationOfThePlace: place})),
     clearInformationOfThePlace: () => set(() => ({ informationOfThePlace: null })),
     setIsLoading: (loading) => set(() => ({ isLoading: loading })),
+    storeUserLocation: (lat, lng) => set(() => ({userLocation: [lat, lng] })),
 }));
 
 
