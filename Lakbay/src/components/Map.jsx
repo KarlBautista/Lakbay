@@ -3,12 +3,15 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import useMap from "./LakbayZustand";
 import gpsIcon from "../assets/gps.png"
+import "leaflet-routing-machine"
+import "leaflet-rotatedmarker"
 function Map() {
     const mapRef = useRef(null);
     const pointOfPlacesMarker = useRef([]);
     const userLocationRef = useRef([]);
     const userMarkerRef = useRef(null);
-    const { pointOfPlaces, storeInformationOfThePlace, storeUserLocation } = useMap(); 
+    const routeControlRef = useRef(null);
+    const { pointOfPlaces, storeInformationOfThePlace, storeUserLocation, shouldShowRoute, informationOfThePlace, storeShowRoute } = useMap(); 
     const philippineBounds = L.latLngBounds(
       [4.6, 116.7],
       [21.3, 126.6]
@@ -62,15 +65,17 @@ function Map() {
   
   const handlePlaceInformation = async (place) => {
     storeInformationOfThePlace(place);
+    storeShowRoute(false);
      mapRef.current.flyTo([place.geometry.coordinates[1], place.geometry.coordinates[0]], 16, {
       animate: true,
       duration: 1.5,
     });
+   
   }
 
 
   const getLocation = () => {
-    navigator.geolocation.getCurrentPosition(show, error, {
+    navigator.geolocation.watchPosition(show, error, {
       enableHighAccuracy: true,
       maximumAge: 0,
     });
@@ -81,13 +86,10 @@ function Map() {
     const lat = position.coords.latitude;
     const lng = position.coords.longitude;
     storeUserLocation(lat, lng);
-    console.log(lat, lng)
     userLocationRef.current = [lat, lng];
     if(mapRef.current){
        mapRef.current.setView([lat, lng], 15);
-      if(userMarkerRef.current){
-        mapRef.current.removeLayer(userMarkerRef.current)
-      }
+      if(!userMarkerRef.current){
       userMarkerRef.current = L.marker([lat, lng]).bindTooltip("You are here!", {
         permanent: true,
         direction: "top",
@@ -100,21 +102,54 @@ function Map() {
        })
     })
        .addTo(mapRef.current);
-    } 
+    } else{
+       userMarkerRef.current.setLatLng([lat, lng]);
+       mapRef.current.panTo([lat, lng]);
+    }
+  }
   }
 
   const error = (error) => {
     console.log(error);
   }
 
+  useEffect(() => {
+    if (!shouldShowRoute) return; 
+    if (!informationOfThePlace) return;
 
+    if(shouldShowRoute && informationOfThePlace){
+      showRoute(informationOfThePlace?.geometry?.coordinates[1], informationOfThePlace?.geometry?.coordinates[0]);
+    }
+  }, [informationOfThePlace, shouldShowRoute])
 
- 
+  const showRoute = (destinationLat, destionationlng) => {
+    console.log
+    const [ userLat, userLng ] =  userLocationRef.current;
+    
+    if(!userLat || !userLng){
+      alert("user location not available yet!");
+      return;
+    }
 
+    if(routeControlRef.current){
+      mapRef.current.removeControl(routeControlRef.current);
+    }
 
+   routeControlRef.current =  L.Routing.control({
+      waypoints: [
+        L.latLng(userLat, userLng),
+        L.latLng(destinationLat, destionationlng),
+      ],
+      addWaypoints: false,
+      routeWhileDragging: false,
+      fitSelectedRoutes: true,
+    }
+  )
+    .addTo(mapRef.current);
+
+  }
 
   return (
- 
     <div className="relative w-full h-full">
       <div id="map" className="w-full h-[99%] z-0" />
       <button className="absolute bottom-20 right-15 z-10 p-5 rounded-full bg-white cursor-pointer

@@ -2,30 +2,12 @@ import React from 'react'
 import useMap from './LakbayZustand'
 
 const PlaceInformation = () => {
-  const { informationOfThePlace } = useMap();
-  
-  // Empty state when no place is selected
-  if (!informationOfThePlace) {
-    return (
-      <div className='bg-white/95 backdrop-blur-sm rounded-2xl shadow-lg border border-gray-100 p-8 w-full'>
-        <div className='text-center text-gray-400'>
-          <div className='w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-50 to-indigo-100 rounded-full flex items-center justify-center'>
-            <svg className='w-8 h-8 text-blue-400' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z' />
-              <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={1.5} d='M15 11a3 3 0 11-6 0 3 3 0 016 0z' />
-            </svg>
-          </div>
-          <p className='text-sm font-medium text-gray-500'>Select a place to view details</p>
-          <p className='text-xs text-gray-400 mt-1'>Click on any location marker</p>
-        </div>
-      </div>
-    )
-  }
+  const { informationOfThePlace, storeShowRoute, isShowRoute } = useMap();
 
   const place = informationOfThePlace.properties;
 
   return (
-    <div className='bg-white/95 rounded-sm border border-gray-100 w-full overflow-hidden max-h-[500px] overflow-y-auto'>
+    <div className='bg-white/95 rounded-sm border border-gray-100 w-full '>
   
       <div className='bg-[#D64545] p-6 text-white'>
         <div className='flex items-center gap-3'>
@@ -139,6 +121,15 @@ const PlaceInformation = () => {
           </div>
         </div>
       </div>
+
+      {/* Show Route Button */}
+      <div className='p-6 pt-0'>
+        <button className='w-full bg-[#0A2A60] text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 cursor-pointer'
+          onClick={() => storeShowRoute(true)}>
+          Show Route
+        </button>
+      </div>
+   
     </div>
   )
 }
