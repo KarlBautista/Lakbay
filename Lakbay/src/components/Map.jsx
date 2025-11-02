@@ -143,6 +143,15 @@ function Map() {
       addWaypoints: false,
       routeWhileDragging: false,
       fitSelectedRoutes: true,
+      lineOptions: {
+        styles: [
+          {
+            color: "#D64545",
+            weight: 6,
+            opacity: 0.8
+          }
+        ]
+      }
     }
   )
     .addTo(mapRef.current);
