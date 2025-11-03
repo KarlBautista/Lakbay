@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query';
 import useMap from './LakbayZustand';
-
+import Swal from "sweetalert2"
 const Categories = () => {
   const [selected, setSelected] = useState("");
   const geoapifyAPI = import.meta.env.VITE_GEOAPIFY_API_KEY;
@@ -77,33 +77,33 @@ const Categories = () => {
           <option value="commercial.jewelry">Jewelry Store</option>
           <option value="commercial.cosmetics">Cosmetics / Beauty</option>
           <option value="commercial.gift_and_souvenir">Gift & Souvenirs</option> 
-        <option value="commercial.bank">Bank</option>
-        <option value="commercial.money_transfer">Money Transfer</option>
-        <option value="commercial.post_office">Post Office</option>
-        <option value="commercial.kiosk">Kiosk</option>
+          <option value="commercial.bank">Bank</option>
+          <option value="commercial.money_transfer">Money Transfer</option>
+          <option value="commercial.post_office">Post Office</option>
+          <option value="commercial.kiosk">Kiosk</option>
 
-        <option value="catering.restaurant">Restaurant</option>
-        <option value="catering.fast_food">Fast Food</option>
-        <option value="catering.cafe">Cafe</option>
-        <option value="catering.bar">Bar</option>
-        <option value="catering.pub">Pub</option>
-        <option value="catering.kiosk">Food Kiosk</option>
-        <option value="catering.food_court">Food Court</option>
-        <option value="catering.ice_cream">Ice Cream Shop</option>
-        <option value="catering.bakery">Bakery</option>
-        <option value="catering.vegan">Vegan Restaurant</option>
-        <option value="catering.localized">Local Specialty Restaurant</option>
-        <option value="catering.diner">Diner</option>
+          <option value="catering.restaurant">Restaurant</option>
+          <option value="catering.fast_food">Fast Food</option>
+          <option value="catering.cafe">Cafe</option>
+          <option value="catering.bar">Bar</option>
+          <option value="catering.pub">Pub</option>
+          <option value="catering.kiosk">Food Kiosk</option>
+          <option value="catering.food_court">Food Court</option>
+          <option value="catering.ice_cream">Ice Cream Shop</option>
+          <option value="catering.bakery">Bakery</option>
+          <option value="catering.vegan">Vegan Restaurant</option>
+          <option value="catering.localized">Local Specialty Restaurant</option>
+          <option value="catering.diner">Diner</option>
 
-        <option value="accommodation.hotel">Hotel</option>
-        <option value="accommodation.motel">Motel</option>
-        <option value="accommodation.hostel">Hostel</option>
-        <option value="accommodation.guest_house">Guest House</option>
-        <option value="accommodation.resort">Resort</option>
-        <option value="accommodation.bed_and_breakfast">Bed & Breakfast</option>
-        <option value="accommodation.camp_site">Camp Site</option>
-        <option value="accommodation.chalet">Chalet / Cabins</option>
-        <option value="accommodation.apartments">Serviced Apartments</option>
+          <option value="accommodation.hotel">Hotel</option>
+          <option value="accommodation.motel">Motel</option>
+          <option value="accommodation.hostel">Hostel</option>
+          <option value="accommodation.guest_house">Guest House</option>
+          <option value="accommodation.resort">Resort</option>
+          <option value="accommodation.bed_and_breakfast">Bed & Breakfast</option>
+          <option value="accommodation.camp_site">Camp Site</option>
+          <option value="accommodation.chalet">Chalet / Cabins</option>
+          <option value="accommodation.apartments">Serviced Apartments</option>
         </select>
     </div>
   )

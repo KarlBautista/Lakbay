@@ -1,4 +1,5 @@
 import React from 'react'
+import  { Link }   from 'react-router-dom'
 import Lakbay3 from "../assets/LakbayPH.png"
 const Header = () => {
   return (
@@ -12,11 +13,12 @@ const Header = () => {
      
 
 
-      <div className='flex text-white gap-10'>
-          <div>Favorites</div>
-          <div>Saved Places</div>
-          <div>Login</div>
-      </div>
+      <nav className='flex text-white gap-10'>
+            <Link to="/">Dashboard</Link>
+            <Link to="/favorites">Favorites</Link>
+            <Link to="/saved-places">Saved Places</Link>
+            <Link to="/auth/login">Login</Link>
+      </nav>
       
     </div>
   )

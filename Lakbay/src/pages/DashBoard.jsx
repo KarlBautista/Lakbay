@@ -7,11 +7,13 @@ import PlaceInformation from '../components/PlaceInformation'
 import useMap from '../components/LakbayZustand'
 import Loading from "../assets/loading.gif"
 const DashBoard = () => {
+
   const { informationOfThePlace, isLoading } = useMap();
+  
   return (
-    <div className='min-h-screen w-full flex flex-col'>
-      <Header />
-      <div className='flex h-[90%] w-full'>
+    <div className='min-h-full h-full w-full flex flex-col'>
+     
+      <div className='flex h-full w-full'>
         <div className='flex flex-col bg-[#F0F6FF] w-[18%] px-5 py-5 gap-5  border-r-5 border-r-[#FFDA3E] border-b-5 border-b-[#FFDA3E]'> 
             <div className=''>
             <SearchBar />
@@ -21,7 +23,8 @@ const DashBoard = () => {
             <Categories />
           </div>
           { isLoading && <div className='w-full h-[50%] flex justify-center items-center'>
-              <img src={Loading} alt="loading" className='w-[50px] h-[50px]' />
+              
+              <img src={Loading} alt="loading" className='w-[50px] h-[50px] z-100' />
             </div>}
         { informationOfThePlace &&
           <div>

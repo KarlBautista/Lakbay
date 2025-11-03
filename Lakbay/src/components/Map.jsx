@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import L from "leaflet";
+import L, { popup } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import useMap from "./LakbayZustand";
 import gpsIcon from "../assets/gps.png"
 import "leaflet-routing-machine"
 import "leaflet-rotatedmarker"
+import Swal from "sweetalert2"; 
+import Lakbay from "../assets/LakbayPH.png"
 function Map() {
     const mapRef = useRef(null);
     const pointOfPlacesMarker = useRef([]);
@@ -54,12 +56,47 @@ function Map() {
         .on("click", () => handlePlaceInformation(place));
 
         pointOfPlacesMarker.current.push(marker);
+      });
+
+      Swal.fire({
+        icon: "success",
+        imageUrl: Lakbay,
+        imageHeight: "150px",
+        imageWidth: "150px",
+        title: `${pointOfPlaces.length} Point of Places Found.`,
+        text: "Enjoy browsing the locations information.",
+        
+        timer: "2000",
+        showConfirmButton: false,
+      
+
       })
 
     }
   if (pointOfPlaces && pointOfPlaces.length > 0) {
     displayPointOfPlaces();
+    if(routeControlRef.current){
+       mapRef.current.removeControl(routeControlRef.current);
+    }
+   
   }
+  if(pointOfPlaces && pointOfPlaces.length === 0){
+    console.log("walang nahanap")
+    Swal.fire({
+      imageUrl: Lakbay,
+      imageHeight: "150px",
+      imageWidth: "150px",
+      title: "No Point of Place Found",
+      text: "Try searching for different places.",
+      icon: "error",
+      popup: "swal2-show",
+      backdrop: "swal2-backdrop-show",
+
+    })
+  }
+
+
+
   }, [pointOfPlaces]);
 
   
@@ -88,7 +125,6 @@ function Map() {
     storeUserLocation(lat, lng);
     userLocationRef.current = [lat, lng];
     if(mapRef.current){
-       mapRef.current.setView([lat, lng], 15);
       if(!userMarkerRef.current){
       userMarkerRef.current = L.marker([lat, lng]).bindTooltip("You are here!", {
         permanent: true,
@@ -102,6 +138,7 @@ function Map() {
        })
     })
        .addTo(mapRef.current);
+        mapRef.current.setView([lat, lng], 15);
     } else{
        userMarkerRef.current.setLatLng([lat, lng]);
        mapRef.current.panTo([lat, lng]);
@@ -166,10 +203,6 @@ function Map() {
         <img src={gpsIcon} alt="" className="w-15 h-15"/>
       </button>
     </div>
-     
-   
-   
-  
   );
 }
 
