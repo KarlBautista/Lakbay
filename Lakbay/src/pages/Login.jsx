@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Lakbay from "../assets/LakbayPH.png"
-
+import useAuthStore from '../components/LakbayAuthZustand'
+import Swal from 'sweetalert2'
+import { useNavigate } from 'react-router-dom'
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     rememberMe: false
   });
+  const { signIn, signInWithGoogle, signInWithGithub } = useAuthStore();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -17,23 +21,107 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
-    console.log('Login attempt:', formData);
+    if(formData.email.trim() === "" || formData.password.trim() === ""){
+      return;
+    }
+    try{
+      const { data, error } = await signIn(formData);
+      if(error){
+        if(error.message === "Invalid login credentials"){
+             Swal.fire({
+                title: "Cannot find User",
+                imageUrl: Lakbay,
+                imageHeight: "150px",
+                imageWidth: "150px",
+                text: "Double check your email or password",
+                icon: "error"
+              });
+            return;
+        }
+        if(error.message === "Email not confirmed"){
+            Swal.fire({
+                title: "Email not confirmed",
+                imageUrl: Lakbay,
+                imageHeight: "150px",
+                imageWidth: "150px",
+                text: "Please confirm your Email first.",
+                icon: "error"
+              });
+            return;
+        }
+       
+      }
+          navigate("/");
+          Swal.fire({
+                title: `Welcome to LakbayPH ${data.user.first_name}`,
+                imageUrl: Lakbay,
+                imageHeight: "150px",
+                imageWidth: "150px",
+                text: "Enjoy your journey with your map companion",
+                icon: "success"
+              });
+    } catch(err){
+      throw new Error(err);
+    }
   };
 
+  const handleSignInWithGoogle = async () => {
+      try{
+        const { data, error } = await signInWithGoogle();
+        if(error){
+          Swal.fire({
+                title: `Google Auth Error`,
+                imageUrl: Lakbay,
+                imageHeight: "150px",
+                imageWidth: "150px",
+                text: error.message,
+                icon: "error"
+              });
+        }
+       
+      } catch(err){
+        console.error(err);
+      }
+  }
+
+  const handleSignInWithGithub = async () => {
+        try{
+          const { data, error } = await signInWithGithub();
+          if(error){
+              Swal.fire({
+                title: `Github Auth Error`,
+                imageUrl: Lakbay,
+                imageHeight: "150px",
+                imageWidth: "150px",
+                text: error.message,
+                icon: "error"
+              });
+          }
+        } catch(err){
+              Swal.fire({
+                title: `Something went wrong`,
+                imageUrl: Lakbay,
+                imageHeight: "150px",
+                imageWidth: "150px",
+                text: err.message,
+                icon: "error"
+              });
+        }
+  }
+
   return (
-    <div className='min-h-screen w-full bg-gradient-to-br from-[#F0F6FF] via-white to-[#E8F4FD] flex items-center justify-center p-4'>
+    <div className='h-full w-full bg-linear-to-br from-[#F0F6FF] via-white to-[#E8F4FD] flex items-center justify-center p-4 relative'>
       {/* Background decorative elements */}
-      <div className='absolute inset-0 overflow-hidden'>
+      <div className='absolute inset-0 overflow-hidden z-0'>
         <div className='absolute top-20 left-20 w-32 h-32 bg-[#FFDA3E]/20 rounded-full blur-xl'></div>
         <div className='absolute bottom-32 right-32 w-48 h-48 bg-[#0A2A60]/10 rounded-full blur-2xl'></div>
         <div className='absolute top-1/2 left-1/3 w-24 h-24 bg-[#D64545]/15 rounded-full blur-lg'></div>
       </div>
 
       {/* Login Card */}
-      <div className='relative w-full max-w-md'>
+      <div className='relative w-full max-w-md z-10'>
         {/* Main Card */}
         <div className='bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 overflow-hidden'>
           
@@ -145,7 +233,8 @@ const Login = () => {
               <div className='grid grid-cols-2 gap-3'>
                 <button
                   type="button"
-                  className='flex items-center justify-center px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors duration-200'
+                  className='flex items-center justify-center px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors duration-200 cursor-pointer'
+                  onClick={() => handleSignInWithGoogle()}
                 >
                   <svg className='w-5 h-5 text-red-500' viewBox='0 0 24 24'>
                     <path fill='currentColor' d='M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z'/>
@@ -157,12 +246,13 @@ const Login = () => {
                 </button>
                 <button
                   type="button"
-                  className='flex items-center justify-center px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors duration-200'
+                  className='flex items-center justify-center px-4 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors duration-200 cursor-pointer' 
+                  onClick={() => handleSignInWithGithub()}
                 >
-                  <svg className='w-5 h-5 text-blue-600' fill='currentColor' viewBox='0 0 24 24'>
-                    <path d='M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z'/>
+                  <svg className='w-5 h-5 text-gray-800' fill='currentColor' viewBox='0 0 20 20'>
+                    <path fillRule='evenodd' d='M10 0C4.477 0 0 4.484 0 10.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.942.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0020 10.017C20 4.484 15.522 0 10 0z' clipRule='evenodd' />
                   </svg>
-                  <span className='ml-2 text-sm font-medium text-gray-700'>Facebook</span>
+                  <span className='ml-2 text-sm font-medium text-gray-700'>GitHub</span>
                 </button>
               </div>
             </form>
@@ -172,7 +262,7 @@ const Login = () => {
           <div className='px-8 py-6 bg-gray-50 border-t border-gray-100 text-center'>
             <p className='text-sm text-gray-600'>
               Don't have an account?{' '}
-              <Link to="/register" className='text-[#0A2A60] hover:text-[#1a4088] font-semibold transition-colors'>
+              <Link to="/auth/register" className='text-[#0A2A60] hover:text-[#1a4088] font-semibold transition-colors'>
                 Sign up here
               </Link>
             </p>
