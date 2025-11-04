@@ -1,38 +1,143 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Map from '../components/Map'
 import Categories from '../components/Categories'
 import SearchBar from '../components/SearchBar'
 import Header from '../components/Header'
 import PlaceInformation from '../components/PlaceInformation'
 import useMap from '../components/LakbayZustand'
+import useAuthStore from '../components/LakbayAuthZustand'
 import Loading from "../assets/loading.gif"
+import SavedPlaces from './SavedPlaces'
+import Swal from 'sweetalert2'
+import Lakbay from "../assets/LakbayPH.png"
+import Favorites from '../components/Favorites'
 const DashBoard = () => {
 
   const { informationOfThePlace, isLoading } = useMap();
-  
+  const { authenticatedUser } = useAuthStore();
+  console.log(authenticatedUser)
+  const [openSideBar, setOpenSideBar ] = useState("searchSideBar");
+  const handleSideBar = (sideBarValue) => {
+      if(sideBarValue === "searchSideBar"){
+        setOpenSideBar(sideBarValue);
+        return;
+      }
+      if(authenticatedUser){
+        setOpenSideBar(sideBarValue);
+      } else{
+        Swal.fire({
+          icon: "info",
+          imageUrl: Lakbay,
+          imageHeight: "150px",
+          imageWidth: "150px",
+          title: "Sign-in first to Save Places",
+          text: "Please Sign-in your account first to be able to save your favorite spots.",    
+        })
+      }
+  }
   return (
     <div className='min-h-full h-full w-full flex flex-col'>
      
       <div className='flex h-full w-full'>
         <div className='flex flex-col bg-[#F0F6FF] w-[18%] px-5 py-5 gap-5  border-r-5 border-r-[#FFDA3E] border-b-5 border-b-[#FFDA3E]'> 
-            <div className=''>
-            <SearchBar />
-           </div>
-
-          <div>
-            <Categories />
-          </div>
-          { isLoading && <div className='w-full h-[50%] flex justify-center items-center'>
-              
-              <img src={Loading} alt="loading" className='w-[50px] h-[50px] z-100' />
-            </div>}
-        { informationOfThePlace &&
-          <div>
-            <PlaceInformation />
-          </div> 
-        }
             
-        </div>
+            {/* Top Action Icons */}
+            <div className='flex justify-center items-center gap-4 pb-3 border-b border-gray-300'>
+              {/* Search Icon */}
+              <button 
+                className='flex items-center justify-center w-10 h-10 bg-blue-500 hover:bg-blue-600 rounded-lg transition-colors duration-200 shadow-md'
+                title="Search Places"
+                onClick={() => handleSideBar("searchSideBar")}
+              >
+                <svg 
+                  className="w-5 h-5 text-white" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24" 
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" 
+                  />
+                </svg>
+              </button>
+
+              {/* Favorites Icon */}
+              <button 
+                className='flex items-center justify-center w-10 h-10 bg-red-500 hover:bg-red-600 rounded-lg transition-colors duration-200 shadow-md'
+                title="Favorites"
+                onClick={() => handleSideBar("favoritesSideBar")}
+              >
+                <svg 
+                  className="w-5 h-5 text-white" 
+                  fill="currentColor" 
+                  viewBox="0 0 20 20" 
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path 
+                    fillRule="evenodd" 
+                    d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" 
+                    clipRule="evenodd" 
+                  />
+                </svg>
+              </button>
+
+              {/* Saved Icon */}
+              <button 
+                className='flex items-center justify-center w-10 h-10 bg-green-500 hover:bg-green-600 rounded-lg transition-colors duration-200 shadow-md'
+                title="Saved Places"
+                onClick={() => handleSideBar("savedSideBar")}
+              >
+                <svg 
+                  className="w-5 h-5 text-white" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24" 
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" 
+                  />
+                </svg>
+              </button>
+            </div>
+        { openSideBar === "searchSideBar" &&
+        <div className='w-full h-full flex flex-col gap-3 overflow-y-auto'>
+            <div className=''>
+              <SearchBar />
+            </div>
+
+            <div>
+              <Categories />
+            </div>
+            { isLoading && <div className='w-full h-[50%] flex justify-center items-center'>
+                
+                <img src={Loading} alt="loading" className='w-[50px] h-[50px] z-100' />
+              </div>}
+          { informationOfThePlace &&
+            <div>
+              <PlaceInformation />
+            </div> 
+          }
+              
+          </div>
+          }
+
+
+          { openSideBar === "favoritesSideBar" && 
+          <div>
+            <Favorites />
+          </div>}
+
+          { openSideBar === "savedSideBar" && 
+          <div>Saved dito</div>}
+         </div> 
       
     
         <div className='flex-1 flex items-center justify-center min-h-[400px] bg-[#D64545] backdrop-blur-md shadow-lg border border-white/20'>

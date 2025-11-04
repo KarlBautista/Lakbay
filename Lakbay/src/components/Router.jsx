@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import DashBoard from "../pages/DashBoard";
-import Favorites from "../pages/Favorites";
+import Favorites from "./Favorites";
 import SavedPlaces from "../pages/SavedPlaces";
 import Login from "../pages/Login";
 import Register from "../pages/Register";

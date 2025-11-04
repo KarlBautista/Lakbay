@@ -18,9 +18,10 @@ const useAuthStore = create((set) => ({
         
         const { data: insertUserData, error: insertUserError } = await supabase.from("users")
         .insert({ 
+            id: signUpData.user.id,
             first_name: firstName,
             last_name: lastName,
-            email
+            email: signUpData.user.email
         });
         if(insertUserError){
             throw new Error(`Error inserting user data: ${insertUserError}`);
@@ -75,17 +76,32 @@ const useAuthStore = create((set) => ({
 
     authListener: () => {
         try{
-            const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-                if(session?.user){
-                    set({ authenticatedUser: session.user });
-                } else {
-                    set({ authenticatedUser: null });
+            const { data: { subscription } } = supabase.auth.onAuthStateChange( async (_event, session) => {
+              const user = session?.user;
+              if(user){
+                const { data: existingUser, error: existingError } = await supabase.from("users")
+                .select("id").eq("id", user.id).single();
+
+               if(!existingUser){
+                const { email, user_metadata } = user;
+                const { error: insertError }  = await supabase.from("users").insert({
+                    id: user.id,
+                    email,
+                    first_name: user_metadata?.full_name?.split(" ")[0] || null,
+                    last_name: user_metadata?.full_name.split(" ")[1] || null,
+                });
+                if(insertError){
+                    throw new Error(`Error inserting: ${insertError.message}`);
                 }
+               }
+                set({ authenticatedUser: user });   
+              } else {
+                set({ authenticatedUser: null });
+              }
             });
             return () => subscription.unsubscribe();
         } catch(err){
             console.error(err);
-            return () => {}; // Return empty function if there's an error
         }
     },
 

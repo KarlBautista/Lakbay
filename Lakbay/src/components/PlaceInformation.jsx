@@ -1,10 +1,48 @@
 import React from 'react'
 import useMap from './LakbayZustand'
-
+import useUserData from "./LakbayUsersData"
+import useAuthStore from './LakbayAuthZustand'
+import Swal from 'sweetalert2'
+import Lakbay from "../assets/LakbayPH.png"
 const PlaceInformation = () => {
   const { informationOfThePlace, storeShowRoute, isShowRoute } = useMap();
+  const { getFavorites, favorites, addToFavorites } = useUserData();
+  const { authenticatedUser } = useAuthStore();
+  console.log(authenticatedUser)
 
-  const place = informationOfThePlace.properties;
+  const handleAddToFavorites = async () => {
+      if(!authenticatedUser){
+           Swal.fire({
+            icon: "info",
+            imageUrl: Lakbay,
+            imageHeight: "150px",
+            imageWidth: "150px",
+            title: "Sign-in first to Save Places",
+            text: "Please Sign-in your account first to be able to save your favorite spots.",    
+          })
+      }
+      try{
+        const response = await addToFavorites({
+          userId: authenticatedUser.id,
+          placeName: informationOfThePlace.properties.name || null,
+          address: informationOfThePlace.properties.address_line2 || null,
+          openingHours: informationOfThePlace.properties.opening_hours || null,
+          phone: informationOfThePlace.properties.phone || null,
+          website: informationOfThePlace.properties.website || null,
+          lat: informationOfThePlace.geometry.coordinates[1],
+          long: informationOfThePlace.geometry.coordinates[0],
+          placeId: informationOfThePlace.properties.place_id
+        });
+        if(!response.error){
+           console.error(`Cannot get your favorites places: ${response.error}`)
+           return;
+        }
+      } catch(err){
+        throw new Error(err)
+      }
+  }
+
+   const place = informationOfThePlace.properties;
 
   return (
     <div className='bg-white/95 rounded-sm border border-gray-100 w-full '>
@@ -124,9 +162,35 @@ const PlaceInformation = () => {
 
       {/* Show Route Button */}
       <div className='p-6 pt-0'>
-        <button className='w-full bg-[#0A2A60] text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 cursor-pointer'
+        <button className='w-full bg-[#0A2A60] hover:bg-[#0A2A60]/90 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 cursor-pointer flex items-center justify-center gap-2'
           onClick={() => storeShowRoute(true)}>
+          <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7' />
+          </svg>
           Show Route
+        </button>
+      </div>
+
+      {/* Divider */}
+      <div className='mx-6 border-t border-gray-200'></div>
+
+      {/* Action Buttons */}
+      <div className='flex gap-3 p-6 pt-4'>
+        {/* Add to Favorites Button */}
+        <button className='flex-1 flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5'
+        onClick={() => handleAddToFavorites()}>
+          <svg className='w-5 h-5' fill='currentColor' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'>
+            <path fillRule='evenodd' d='M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z' clipRule='evenodd' />
+          </svg>
+          <span className='text-sm'>Add to Favorites</span>
+        </button>
+
+        {/* Add to Saved Places Button */}
+        <button className='flex-1 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5'>
+          <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
+            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z' />
+          </svg>
+          <span className='text-sm'>Save Place</span>
         </button>
       </div>
    

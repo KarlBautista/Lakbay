@@ -1,5 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { registerUser } = require("../controllers/usersController");
+const { getFavorites, addToFavorites } = require("../controllers/usersController");
 
-router.post("register-user", registerUser);
+router.post("/get-favorites", getFavorites);
+router.post("/add-to-favorites", addToFavorites);
+
+module.exports = router;
