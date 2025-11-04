@@ -329,7 +329,11 @@ function Map() {
     if(shouldShowRoute && informationOfThePlace){
       showRoute(informationOfThePlace?.geometry?.coordinates[1], informationOfThePlace?.geometry?.coordinates[0]);
     }
-  }, [informationOfThePlace, shouldShowRoute])
+  }, [informationOfThePlace, shouldShowRoute]);
+
+  useEffect(() => {
+
+  }, [shouldShowRoute])
 
   const showRoute = (destinationLat, destionationlng) => {
     const [ userLat, userLng ] = userLocationRef.current;
@@ -346,6 +350,7 @@ function Map() {
         L.latLng(userLat, userLng),
         L.latLng(destinationLat, destionationlng),
       ],
+   
       addWaypoints: false,
       routeWhileDragging: false,
       fitSelectedRoutes: true,
@@ -359,6 +364,7 @@ function Map() {
         ]
       }
     }).addTo(mapRef.current);
+    
 
     // Store route state for persistence
     setRouteState(

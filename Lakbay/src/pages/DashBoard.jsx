@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Map from '../components/Map'
 import Categories from '../components/Categories'
 import SearchBar from '../components/SearchBar'
@@ -11,12 +11,21 @@ import SavedPlaces from './SavedPlaces'
 import Swal from 'sweetalert2'
 import Lakbay from "../assets/LakbayPH.png"
 import Favorites from '../components/Favorites'
+import useUserData from '../components/LakbayUsersData'
 const DashBoard = () => {
 
   const { informationOfThePlace, isLoading } = useMap();
   const { authenticatedUser } = useAuthStore();
-  console.log(authenticatedUser)
+  const { getFavorites, favorites, addToFavorites } = useUserData();
   const [openSideBar, setOpenSideBar ] = useState("searchSideBar");
+  useEffect(() => {
+      if(authenticatedUser && authenticatedUser.id){
+        getFavorites(authenticatedUser.id)
+      }
+  }, [authenticatedUser, addToFavorites])
+
+ 
+
   const handleSideBar = (sideBarValue) => {
       if(sideBarValue === "searchSideBar"){
         setOpenSideBar(sideBarValue);
@@ -39,7 +48,7 @@ const DashBoard = () => {
     <div className='min-h-full h-full w-full flex flex-col'>
      
       <div className='flex h-full w-full'>
-        <div className='flex flex-col bg-[#F0F6FF] w-[18%] px-5 py-5 gap-5  border-r-5 border-r-[#FFDA3E] border-b-5 border-b-[#FFDA3E]'> 
+        <div className='flex flex-col bg-[#F0F6FF] w-[18%] px-5 py-5 gap-5 border-r-5 border-r-[#FFDA3E] border-b-5 border-b-[#FFDA3E] overflow-hidden'> 
             
             {/* Top Action Icons */}
             <div className='flex justify-center items-center gap-4 pb-3 border-b border-gray-300'>
@@ -108,20 +117,20 @@ const DashBoard = () => {
               </button>
             </div>
         { openSideBar === "searchSideBar" &&
-        <div className='w-full h-full flex flex-col gap-3 overflow-y-auto'>
-            <div className=''>
+        <div className='w-full flex-1 flex flex-col gap-3 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100'>
+            <div className='shrink-0'>
               <SearchBar />
             </div>
 
-            <div>
+            <div className='shrink-0'>
               <Categories />
             </div>
-            { isLoading && <div className='w-full h-[50%] flex justify-center items-center'>
+            { isLoading && <div className='w-full h-[50%] flex justify-center items-center shrink-0'>
                 
                 <img src={Loading} alt="loading" className='w-[50px] h-[50px] z-100' />
               </div>}
           { informationOfThePlace &&
-            <div>
+            <div className='shrink-0 overflow-y-auto max-h-[calc(100vh-400px)] scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100'>
               <PlaceInformation />
             </div> 
           }
@@ -131,12 +140,16 @@ const DashBoard = () => {
 
 
           { openSideBar === "favoritesSideBar" && 
-          <div>
+          <div className='w-full flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100'>
             <Favorites />
           </div>}
 
           { openSideBar === "savedSideBar" && 
-          <div>Saved dito</div>}
+          <div className='w-full flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100'>
+            <div className='p-4 text-center text-gray-600'>
+              Saved places coming soon...
+            </div>
+          </div>}
          </div> 
       
     

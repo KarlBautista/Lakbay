@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import axios from "axios"
+
 const useUserData = create((set) => ({
     favorites: null,
     setFavorites: (favoritesValue) => set({ favorites: favoritesValue }),
@@ -12,7 +13,7 @@ const useUserData = create((set) => ({
                 return { success: false, error: error.message };
             }
             if(response.data){
-                setFavorites(response.data);
+                set({ favorites: response.data.data })
             }
         } catch(err){
             console.error(`Getting Users Favorites Error: ${err.message}`);

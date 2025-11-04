@@ -2,13 +2,14 @@ const supabase = require("../config/supabaseClient")
 
 const getFavorites = async (req, res) => {
     const { userId } = req.body;
+    console.log(req.body)
     try{
         const { data: favoritesData, error: favoritesError } = await supabase.from("favorites")
         .select("*").eq("user_id", userId);
 
         if(favoritesError){
             console.error(`Error getting favorites data from supabase: ${favoritesError.message}`);
-            res.status(500).json({ error: err.message })
+            res.status(500).json({ error: favoritesError.message })
         }
         if(favoritesData){
             res.status(200).json({ data: favoritesData });
@@ -50,8 +51,6 @@ const addToFavorites = async (req, res) => {
         console.error("Error adding to favorites:", err.message)
         res.status(500).json({ error: err.message });
     }
-
-
 }
 
 
