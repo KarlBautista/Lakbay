@@ -18,7 +18,7 @@ function Map() {
     const isLocationRequestingRef = useRef(false);
     const restartTimeoutRef = useRef(null);
     const { pointOfPlaces, storeInformationOfThePlace, storeUserLocation, shouldShowRoute, informationOfThePlace, 
-      storeShowRoute, mapState, saveMapState, routeState, setRouteState, clearRouteState } = useMap(); 
+      storeShowRoute, mapState, saveMapState, routeState, setRouteState, clearRouteState, setFavoriteToShow, favoriteToShow } = useMap(); 
     const philippineBounds = L.latLngBounds(
       [4.6, 116.7],
       [21.3, 126.6]
@@ -199,9 +199,10 @@ function Map() {
 
   
   const handlePlaceInformation = async (place) => {
+    setFavoriteToShow(null);
     storeInformationOfThePlace(place);
     storeShowRoute(false);
-    // Clear route state when selecting new place
+
     clearRouteState();
      mapRef.current.flyTo([place.geometry.coordinates[1], place.geometry.coordinates[0]], 16, {
       animate: true,
@@ -225,14 +226,12 @@ function Map() {
     console.log("Starting location watch...");
     watchIdRef.current = navigator.geolocation.watchPosition(show, error, {
       enableHighAccuracy: true,
-      maximumAge: 5000, // Allow cached location up to 5 seconds old
-      timeout: 15000 // Increase timeout
+      maximumAge: 5000,
+      timeout: 15000 
     });
   }
   const getLocation = () => {
     const now = Date.now();
-    
-    // Throttle location requests - only allow one every 3 seconds
     if (now - lastLocationRequestRef.current < 3000) {
       console.log("Location request throttled, too soon since last request");
       return;
@@ -322,24 +321,33 @@ function Map() {
     }
   }
 
+  // Handle route showing for search results (informationOfThePlace)
   useEffect(() => {
     if (!shouldShowRoute) return; 
     if (!informationOfThePlace) return;
-
-    if(shouldShowRoute && informationOfThePlace){
-      showRoute(informationOfThePlace?.geometry?.coordinates[1], informationOfThePlace?.geometry?.coordinates[0]);
-    }
+    
+    // Clear favoriteToShow when showing route for search result
+    setFavoriteToShow(null);
+    
+    console.log("Showing route for search result:", informationOfThePlace.properties?.name);
+    showRoute(informationOfThePlace?.geometry?.coordinates[1], informationOfThePlace?.geometry.coordinates[0]);
+  
   }, [informationOfThePlace, shouldShowRoute]);
 
+  // Handle route showing for favorites (favoriteToShow)
   useEffect(() => {
+    if (!shouldShowRoute) return;
+    if (!favoriteToShow) return;
+    
+    console.log("Showing route for favorite:", favoriteToShow.properties?.name);
+    showRoute(favoriteToShow?.geometry?.coordinates[1], favoriteToShow?.geometry.coordinates[0]);
+    
+  }, [shouldShowRoute, favoriteToShow])
 
-  }, [shouldShowRoute])
 
   const showRoute = (destinationLat, destionationlng) => {
     const [ userLat, userLng ] = userLocationRef.current;
     
-
-    // Remove existing route if any
     if(routeControlRef.current){
       mapRef.current.removeControl(routeControlRef.current);
     }

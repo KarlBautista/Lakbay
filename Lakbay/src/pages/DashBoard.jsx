@@ -12,17 +12,18 @@ import Swal from 'sweetalert2'
 import Lakbay from "../assets/LakbayPH.png"
 import Favorites from '../components/Favorites'
 import useUserData from '../components/LakbayUsersData'
+
 const DashBoard = () => {
 
   const { informationOfThePlace, isLoading } = useMap();
   const { authenticatedUser } = useAuthStore();
-  const { getFavorites, favorites, addToFavorites } = useUserData();
+  const { getFavorites, favorites, addToFavorites, deleteFromFavorites } = useUserData();
   const [openSideBar, setOpenSideBar ] = useState("searchSideBar");
   useEffect(() => {
       if(authenticatedUser && authenticatedUser.id){
         getFavorites(authenticatedUser.id)
       }
-  }, [authenticatedUser, addToFavorites])
+  }, [authenticatedUser])
 
  
 

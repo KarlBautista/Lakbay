@@ -6,6 +6,8 @@ const useMap = create((set) => ({
     informationOfThePlace: null,
     isLoading: false,
     shouldShowRoute: false,
+    favoriteToShow: null,
+    setFavoriteToShow: (favoritePlace) => set({ favoriteToShow: favoritePlace }),
     map: null,
     routeState: {
         isActive: false,

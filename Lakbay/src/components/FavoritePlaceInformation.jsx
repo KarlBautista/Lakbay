@@ -6,8 +6,8 @@ import Swal from 'sweetalert2'
 import Lakbay from "../assets/LakbayPH.png"
 
 const FavoritePlaceInformation = ({ favoritePlace }) => {
-  const { storeShowRoute, storeInformationOfThePlace } = useMap();
-  const { removeFromFavorites, favorites } = useUserData();
+  const { storeShowRoute, storeInformationOfThePlace, setFavoriteToShow, favoriteToShow } = useMap();
+  const { deleteFromFavorites, favorites } = useUserData();
   const { authenticatedUser } = useAuthStore();
 
   const handleRemoveFromFavorites = async () => {
@@ -25,8 +25,9 @@ const FavoritePlaceInformation = ({ favoritePlace }) => {
       });
 
       if (result.isConfirmed) {
-        const response = await removeFromFavorites(favoritePlace.id);
-        if (response.success) {
+        const response = await deleteFromFavorites(favoritePlace.id, authenticatedUser.id);
+        console.log(response);
+        if (response) {
           Swal.fire({
             title: 'Removed!',
             text: 'Place has been removed from your favorites.',
@@ -56,30 +57,29 @@ const FavoritePlaceInformation = ({ favoritePlace }) => {
     // Convert favorite place data to information format and show route
     const placeInfo = {
       properties: {
-        name: favoritePlace.placeName,
+        name: favoritePlace.place_name,
         address_line2: favoritePlace.address,
-        opening_hours: favoritePlace.openingHours,
+        opening_hours: favoritePlace.opening_hours,
         phone: favoritePlace.phone,
         website: favoritePlace.website,
-        place_id: favoritePlace.placeId
+        place_id: favoritePlace.place_id
       },
       geometry: {
         coordinates: [favoritePlace.long, favoritePlace.lat]
       }
     };
     
-    // Store the place information (this will trigger the Map component to show place info)
-    storeInformationOfThePlace(placeInfo);
+   
+    setFavoriteToShow(placeInfo);
     
-    // Show the route
     storeShowRoute(true);
     
-    // The Map component will handle creating the marker with tooltip automatically
-    // when informationOfThePlace changes, similar to how handlePlaceInformation works
+    
   };
 
   return (
-    <div className='bg-white/95 rounded-lg border border-gray-100 w-full shadow-md hover:shadow-lg transition-shadow duration-200'>
+    
+    <div className={`bg-white/95 rounded-lg border ${favoriteToShow && favoriteToShow.properties.place_id === favoritePlace.place_id ? "border-red-500" : "border-gray-100" }  w-full shadow-md hover:shadow-lg transition-shadow duration-200`}>
   
       {/* Header */}
       <div className='bg-gradient-to-r from-red-500 to-red-600 p-5 text-white rounded-t-lg'>

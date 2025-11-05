@@ -53,6 +53,25 @@ const addToFavorites = async (req, res) => {
     }
 }
 
+const deleteFromFavorites = async (req, res) => {
+    const favoritePlaceId = req.body.favoritePlaceId;
+    try{
+        const { data: deleteFromFavoritesData, error: deleteFromFavoritesError } = await supabase.from("favorites")
+        .delete().eq("id", favoritePlaceId).select();
+        
+        if(deleteFromFavoritesError){
+            console.error("Error Deleting Favorite Place: ", deleteFromFavoritesError.message);
+            return res.status(500).json({ error: deleteFromFavoritesError.message });
+        }
+        if(deleteFromFavoritesData){
+            return res.status(200).json({ data: deleteFromFavorites.data });
+        }
+    } catch(err){
+        console.error(`Something went wrong in deleting from favorties ${err.message}`);
+        return res.status(500).json({ error: err.message });
+    }
+}
 
 
-module.exports = { getFavorites, addToFavorites } 
+
+module.exports = { getFavorites, addToFavorites, deleteFromFavorites } 
