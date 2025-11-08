@@ -142,8 +142,6 @@ const useAuthStore = create((set) => ({
             console.error(err)
         }
     }
-
-
 }))
 
 export default useAuthStore;

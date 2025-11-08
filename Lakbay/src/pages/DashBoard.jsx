@@ -7,7 +7,7 @@ import PlaceInformation from '../components/PlaceInformation'
 import useMap from '../components/LakbayZustand'
 import useAuthStore from '../components/LakbayAuthZustand'
 import Loading from "../assets/loading.gif"
-import SavedPlaces from './SavedPlaces'
+import SavedPlaces from '../components/SavePlaces'
 import Swal from 'sweetalert2'
 import Lakbay from "../assets/LakbayPH.png"
 import Favorites from '../components/Favorites'
@@ -17,11 +17,12 @@ const DashBoard = () => {
 
   const { informationOfThePlace, isLoading } = useMap();
   const { authenticatedUser } = useAuthStore();
-  const { getFavorites, favorites, addToFavorites, deleteFromFavorites } = useUserData();
+  const { getFavorites, favorites, addToFavorites, deleteFromFavorites, getSaved } = useUserData();
   const [openSideBar, setOpenSideBar ] = useState("searchSideBar");
   useEffect(() => {
       if(authenticatedUser && authenticatedUser.id){
         getFavorites(authenticatedUser.id)
+        getSaved(authenticatedUser.id)
       }
   }, [authenticatedUser])
 
@@ -148,7 +149,7 @@ const DashBoard = () => {
           { openSideBar === "savedSideBar" && 
           <div className='w-full flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100'>
             <div className='p-4 text-center text-gray-600'>
-              Saved places coming soon...
+              <SavedPlaces />
             </div>
           </div>}
          </div> 

@@ -6,9 +6,9 @@ import Swal from 'sweetalert2'
 import Lakbay from "../assets/LakbayPH.png"
 const PlaceInformation = () => {
   const { informationOfThePlace, storeShowRoute, isShowRoute } = useMap();
-  const { getFavorites, favorites, addToFavorites } = useUserData();
+  const { getFavorites, favorites, addToFavorites, addToSaved, saved } = useUserData();
   const { authenticatedUser } = useAuthStore();
-  console.log(authenticatedUser)
+  console.log(saved);
 
   const handleAddToFavorites = async () => {
       if(!authenticatedUser){
@@ -40,6 +40,54 @@ const PlaceInformation = () => {
             imageHeight: "150px",
             imageWidth: "150px",
             title: "Added to your Favorites",
+            text: "Browse more places",
+            timer: 2000,
+            showConfirmButton: false    
+          })
+        }
+        if(response && response.error){
+           Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: response.error || "Failed to add to favorites"
+          });
+           return;
+        }
+      } catch(err){
+        throw new Error(err)
+      }
+  }
+
+   const handleAddToSaved = async () => {
+      if(!authenticatedUser){
+           Swal.fire({
+            icon: "info",
+            imageUrl: Lakbay,
+            imageHeight: "150px",
+            imageWidth: "150px",
+            title: "Sign-in first to Save Places",
+            text: "Please Sign-in your account first to be able to save your favorite spots.",    
+          })
+      }
+      try{
+        const response = await addToSaved({
+          userId: authenticatedUser.id,
+          placeName: informationOfThePlace.properties.name || null,
+          address: informationOfThePlace.properties.address_line2 || null,
+          openingHours: informationOfThePlace.properties.opening_hours || null,
+          phone: informationOfThePlace.properties.phone || null,
+          website: informationOfThePlace.properties.website || null,
+          lat: informationOfThePlace.geometry.coordinates[1],
+          long: informationOfThePlace.geometry.coordinates[0],
+          placeId: informationOfThePlace.properties.place_id
+        });
+        if(response && response.success){
+            Swal.fire({
+            icon: "success",
+            imageUrl: Lakbay,
+            imageHeight: "150px",
+            imageWidth: "150px",
+            title: "Added to your Saved Places",
             text: "Browse more places",
             timer: 2000,
             showConfirmButton: false    
@@ -205,7 +253,8 @@ const PlaceInformation = () => {
         </button>
 
         {/* Add to Saved Places Button */}
-        <button className='flex-1 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5'>
+        <button className='flex-1 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5'
+        onClick={() => handleAddToSaved()}>
           <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
             <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z' />
           </svg>

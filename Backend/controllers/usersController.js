@@ -72,6 +72,59 @@ const deleteFromFavorites = async (req, res) => {
     }
 }
 
+const addToSaved = async (req, res) => {
+    const { userId, placeName, address, phone, openingHours, website,
+            lat, long, placeId } = req.body.savedValue;
+    console.log("naganaa");
+    try {
+        const { data: addToSavedData, error: addToSavedError } = await supabase.from("saved")
+        .insert({
+            user_id: userId,
+            place_name: placeName,
+            address,
+            phone,
+            opening_hours: openingHours,
+            website,
+            lat,
+            long,
+            place_id: placeId
+        }).select();
+
+        if(addToSavedError){
+            console.error(`Error to add to saved: ${addToSavedError.message}`);
+            res.status(500).json({ success: false, error: addToSavedError.message });
+        }
+        if(addToSavedData){
+            console.log(addToSavedData)
+            res.status(200).json({ success: true, data: addToSavedData.data });
+        }
+    } catch(err){
+        console.error(`Error to add to saved: ${err.message}`);
+        res.status(500).json({ success: false, error: err.message });
+    }
+}
+
+const getSaved = async (req, res) => {
+    const { userId } = req.body;
+    console.log(req.body)
+    try{
+        const { data: savedData, error: savedError } = await supabase.from("saved")
+        .select("*").eq("user_id", userId);
+
+        if(savedError){
+            console.error(`Error getting saved data from supabase: ${favoritesError.message}`);
+            res.status(500).json({ error: favoritesError.message })
+        }
+        if(savedData){
+            console.log(savedData)
+            res.status(200).json({ data: savedData });
+        }
+    } catch(err){
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
+}
 
 
-module.exports = { getFavorites, addToFavorites, deleteFromFavorites } 
+
+module.exports = { getFavorites, addToFavorites, deleteFromFavorites, addToSaved, getSaved } 

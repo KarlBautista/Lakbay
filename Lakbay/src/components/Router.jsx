@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import DashBoard from "../pages/DashBoard";
 import Favorites from "./Favorites";
-import SavedPlaces from "../pages/SavedPlaces";
+import SavedPlaces from "./SavePlaces";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 const router = createBrowserRouter([
@@ -11,8 +11,6 @@ const router = createBrowserRouter([
       element: <App />,
       children: [
         { index: true, element: <DashBoard /> },
-        { path: "favorites", element: <Favorites /> },
-        { path: "saved-places", element: <SavedPlaces /> },
         { path: "auth", children: [
             { path: "login", element: <Login /> },
             { path: "register", element: <Register />}

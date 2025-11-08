@@ -3,7 +3,52 @@ import axios from "axios"
 
 const useUserData = create((set) => ({
     favorites: null,
+    saved: null,
     setFavorites: (favoritesValue) => set({ favorites: favoritesValue }),
+    setSaved: (savedValue) => set({ saved: savedValue }),
+    addToSaved: async (savedValue) => {
+        try{
+            const response = await axios.post("http://localhost:3000/api/add-to-saved", {
+                savedValue
+            })
+            if(response.error){
+                console.error(`Error Add to Favorites: ${response.error}`);
+                return { success: false, error: error };
+            }
+            if(response.data){
+                console.log(`Added to saved:`, response.data);
+                // Refresh favorites after adding
+                const updatedSaved = await axios.post("http://localhost:3000/api/get-saved", {
+                    userId: savedValue.userId
+                });
+                if(updatedSaved.data){
+                    set({ favorites: updatedSaved.data });
+                }
+                return { success: true };
+            }
+        } catch(err){
+            console.error(`Error Add to Favorites: ${err.message}`);
+            return { success: false, error: err.message };
+        }
+    },
+    getSaved: async (userId) => {
+        try {
+            const response = await axios.post("http://localhost:3000/api/get-saved", {
+                userId
+            });
+            if(response.error){
+                console.error(`Error get saved: ${response.error}`);
+                return { success: false, error: response.error };
+            }
+            // backend returns { data: [...] }, so set saved to the array at response.data.data
+            if(response.data){
+                set({ saved: response.data.data || [] });
+            }
+        } catch (err){
+            console.error(`Errr get saved: ${err.message}`);
+            return { success: false, error: err.message };
+        }
+    },
     getFavorites: async (userId) => {
         try{
             const response = await axios.post("http://localhost:3000/api/get-favorites", {
