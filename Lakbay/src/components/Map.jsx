@@ -416,12 +416,12 @@ function Map() {
     }).addTo(mapRef.current);
   }
 
-  return (
+  return (  
     <div className="relative w-full h-full">
       <div id="map" className="w-full h-[99%] z-0" />
-      <button className="absolute bottom-20 right-15 z-10 p-5 rounded-full bg-white cursor-pointer
+      <button className="absolute bottom-10 md:bottom-20 md:right-15 right-5 z-10 p-5 rounded-full bg-white cursor-pointer
         hover:border" title="Get my location" onClick={() => getLocation()}>
-        <img src={gpsIcon} alt="" className="w-15 h-15"/>
+        <img src={gpsIcon} alt="" className="w-7 h-7 md:w-15 md:h-15"/>
       </button>
     </div>
   );

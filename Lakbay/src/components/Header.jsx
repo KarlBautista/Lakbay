@@ -91,9 +91,10 @@ const Header = () => {
 
    console.log(authenticatedUser);
   return (
-    <div className='w-full h-[100px] px-5 bg-[#0A2A60] flex items-center justify-evenly shadow-2xl border-b-4 border-[#FFDA3E] relative z-50'>
-      <div className='flex items-center w-[20%] h-full justify-center  '>
-        <div className='w-[30%] h-full'>
+    <div className='w-full h-[100px] px-3 bg-[#0A2A60] flex items-center  shadow-2xl border-b-4 border-[#FFDA3E]  relative z-50 justify-between md:justify-evenly
+    '>
+      <div className='flex items-center h-full md:w-[20%] sm:w-[30%] w-[70%] md:justify-center '>
+        <div className='w-[40%] h-full md:w-[30%]'>
             <img src={Lakbay} alt="LakbayPH Logo" className='w-full h-full' />
         </div>
           <h1 className='text-2xl text-white font-semibold'>LakbayPH</h1>
@@ -103,7 +104,7 @@ const Header = () => {
       <nav className='flex text-white items-center gap-10'>
         <Link 
           to="/" 
-          className='flex items-center justify-center w-10 h-10 bg-white/10 rounded-lg hover:bg-white/20 transition-colors duration-200'
+          className='flex items-center justify-center w-10 h-10 bg-white/10 rounded-lg hover:bg-white/20 transition-colors duration-200 hidden md:flex'
           title="Dashboard"
         >
           {/* Dashboard Icon SVG */}
