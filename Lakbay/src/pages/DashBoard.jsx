@@ -11,7 +11,7 @@ import Swal from 'sweetalert2'
 import Lakbay from "../assets/LakbayPH.png"
 import Favorites from '../components/Favorites'
 import useUserData from '../components/LakbayUsersData'
-import Loading from "../assets/Loading.png"
+import Loading from "../assets/Loading.gif"
 
 const DashBoard = () => {
 
