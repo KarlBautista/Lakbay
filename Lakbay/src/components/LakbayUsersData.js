@@ -17,12 +17,13 @@ const useUserData = create((set) => ({
             }
             if(response.data){
                 console.log(`Added to saved:`, response.data);
-                // Refresh favorites after adding
+                // Refresh saved after adding
                 const updatedSaved = await axios.post("http://localhost:3000/api/get-saved", {
                     userId: savedValue.userId
                 });
                 if(updatedSaved.data){
-                    set({ favorites: updatedSaved.data });
+                    // API returns payload under `data.data` (see getSaved implementation)
+                    set({ saved: updatedSaved.data.data || [] });
                 }
                 return { success: true };
             }
@@ -40,7 +41,7 @@ const useUserData = create((set) => ({
                 console.error(`Error get saved: ${response.error}`);
                 return { success: false, error: response.error };
             }
-            // backend returns { data: [...] }, so set saved to the array at response.data.data
+       
             if(response.data){
                 set({ saved: response.data.data || [] });
             }
@@ -87,6 +88,29 @@ const useUserData = create((set) => ({
             }
         } catch(err){
             console.error(`Error Adding to Favorites: ${err.message}`);
+            return { success: false, error: err.message };
+        }
+    },
+    deleteFromSaved: async (savedPlaceId, userId) => {
+        try{
+            const response = await axios.delete("http://localhost:3000/api/delete-from-saved", {
+                data: { savedPlaceId }
+            });
+            if(response.error){
+                console.error(`Delete from saved error: ${response.error}`);
+                return { success: false, error: response.error };
+            }
+            if(response.data){
+                const updatedSaved = await axios.post("http://localhost:3000/api/get-saved", {
+                    userId: userId
+                });
+                if(updatedSaved.data){
+                    set({ saved: updatedSaved.data.data });
+                }
+                return { success: true };
+            }
+        } catch (err){
+            console.error(`Error delete from saved: ${err.message}`);
             return { success: false, error: err.message };
         }
     },

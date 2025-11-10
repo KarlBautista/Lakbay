@@ -5,7 +5,7 @@ import useAuthStore from './LakbayAuthZustand'
 import Swal from 'sweetalert2'
 import { useNavigate } from 'react-router-dom'
 const Header = () => {
-  const { authenticatedUser, signOut } = useAuthStore();
+  const { authenticatedUser, signOut, setAuthenticatedUser } = useAuthStore();
   const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -30,9 +30,41 @@ const Header = () => {
 
   const signOutUser = async () => {
     setIsDropdownOpen(false); // Close dropdown when signing out
-    const { success, error } = await signOut();
-    if(success){
-      navigate("/")
+    try {
+      const result = await signOut();
+      console.log('signOut result:', result);
+
+      // Normal flow: store returns { success: true } or { success: false, error }
+      if (result && result.success) {
+        navigate("/");
+        Swal.fire({
+          title: "Signed Out",
+          imageUrl: Lakbay,
+          imageHeight: "150px",
+          imageWidth: "150px",
+          text: "Thank you for using LakbayPH",
+          icon: "success"
+        });
+        return;
+      }
+
+      // If the result explicitly indicates failure, show the error
+      if (result && result.success === false) {
+        Swal.fire({
+          title: "Something went wrong",
+          imageUrl: Lakbay,
+          imageHeight: "150px",
+          imageWidth: "150px",
+          text: result.error?.message || 'Sign out failed',
+          icon: "error"
+        });
+        return;
+      }
+
+      // Fallback: some code paths might return undefined/null — force local sign-out
+      console.warn('signOut returned no explicit result, performing local sign-out fallback');
+      setAuthenticatedUser(null);
+      navigate('/');
       Swal.fire({
         title: "Signed Out",
         imageUrl: Lakbay,
@@ -41,14 +73,14 @@ const Header = () => {
         text: "Thank you for using LakbayPH",
         icon: "success"
       });
-    } else {
-      
-        Swal.fire({
+    } catch (err) {
+      console.error('signOutUser error:', err);
+      Swal.fire({
         title: "Something went wrong",
         imageUrl: Lakbay,
         imageHeight: "150px",
         imageWidth: "150px",
-        text: error.message,
+        text: err?.message || 'Unknown error',
         icon: "error"
       });
     }

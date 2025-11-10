@@ -3,11 +3,11 @@ import useMap from './LakbayZustand'
 import useAuthStore from './LakbayAuthZustand'
 import Swal from 'sweetalert2'
 import Lakbay from "../assets/LakbayPH.png"
-
+import useUserData from './LakbayUsersData'
 const SavedPlaceInformation = ({ savedPlace }) => {
   const { storeShowRoute, setFavoriteToShow } = useMap();
   const { authenticatedUser } = useAuthStore();
-
+  const { deleteFromSaved, getSaved } = useUserData();
   const handleShowRoute = () => {
     const placeInfo = {
       properties: {
@@ -39,26 +39,52 @@ const SavedPlaceInformation = ({ savedPlace }) => {
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Yes, remove it!'
     });
-
     if (result.isConfirmed) {
+      // call delete and handle response defensively
+      let response;
+      try {
+        response = await deleteFromSaved(savedPlace.id, authenticatedUser.id);
+      } catch (err) {
+        console.error('deleteFromSaved threw:', err);
+        Swal.fire({
+          title: 'Something went wrong deleting saved',
+          text: 'Please try again',
+          imageUrl: Lakbay,
+          imageHeight: '120px',
+          imageWidth: '120px',
+        });
+        return;
+      }
+
+      // response shape may vary; treat any falsy/errored response as failure
+      if (!response || response.error || response.success === false) {
+        Swal.fire({
+          title: 'Something went wrong deleting saved',
+          text: 'Please try again',
+          imageUrl: Lakbay,
+          imageHeight: '120px',
+          imageWidth: '120px',
+        });
+        return;
+      }
+
       Swal.fire({
-        title: 'Removed!',
-        text: 'Place has been removed from your saved list.',
+        title: 'Saved Place Deleted',
+        icon: 'success',
         imageUrl: Lakbay,
         imageHeight: '120px',
         imageWidth: '120px',
-        icon: 'success',
-        timer: 1600,
-        showConfirmButton: false
       });
+     
+      
     }
+
+
   };
 
   return (
-    <div className={`bg-white/95 rounded-lg border border-gray-100 w-full shadow-md hover:shadow-lg transition-shadow duration-200`}>
-
-  {/* Header - green themed */}
-  <div className='bg-green-600 p-5 text-white rounded-t-lg'>
+  <div className={`bg-white/95 rounded-lg border border-gray-100 w-full shadow-md hover:shadow-lg transition-shadow duration-200`}>
+  <div className='bg-[#F4C430] p-5 text-white rounded-t-lg'>
         <div className='flex items-center gap-3'>
           <div className='w-11 h-11 bg-white/20 rounded-full flex items-center justify-center shrink-0'>
             <svg className='w-6 h-6' fill='currentColor' viewBox='0 0 20 20'>
@@ -78,8 +104,8 @@ const SavedPlaceInformation = ({ savedPlace }) => {
       <div className='p-5 space-y-4'>
         {/* Address */}
         <div className='flex items-start gap-3'>
-          <div className='w-9 h-9 bg-green-50 rounded-lg flex items-center justify-center shrink-0'>
-            <svg className='w-4 h-4 text-green-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+          <div className='w-9 h-9 bg-[#F4C430]/10 rounded-lg flex items-center justify-center shrink-0'>
+            <svg className='w-4 h-4 text-[#F4C430]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
               <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z' />
               <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 11a3 3 0 11-6 0 3 3 0 016 0z' />
             </svg>
@@ -97,8 +123,8 @@ const SavedPlaceInformation = ({ savedPlace }) => {
         {/* Opening Hours */}
         {savedPlace?.opening_hours && (
           <div className='flex items-start gap-3'>
-            <div className='w-9 h-9 bg-green-50 rounded-lg flex items-center justify-center shrink-0'>
-              <svg className='w-4 h-4 text-green-500' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+            <div className='w-9 h-9 bg-[#F4C430]/10 rounded-lg flex items-center justify-center shrink-0'>
+              <svg className='w-4 h-4 text-[#F4C430]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z' />
               </svg>
             </div>
@@ -112,8 +138,8 @@ const SavedPlaceInformation = ({ savedPlace }) => {
         {/* Phone */}
         {savedPlace?.phone && (
           <div className='flex items-start gap-3'>
-            <div className='w-9 h-9 bg-green-50 rounded-lg flex items-center justify-center shrink-0'>
-              <svg className='w-4 h-4 text-green-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+            <div className='w-9 h-9 bg-[#F4C430]/10 rounded-lg flex items-center justify-center shrink-0'>
+              <svg className='w-4 h-4 text-[#F4C430]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z' />
               </svg>
             </div>
@@ -121,7 +147,7 @@ const SavedPlaceInformation = ({ savedPlace }) => {
               <p className='text-xs font-semibold text-gray-600 mb-1'>Phone</p>
               <a 
                 href={`tel:${savedPlace.phone}`}
-                className='text-green-700 text-sm hover:text-green-900 hover:underline transition-colors font-medium'
+                className='text-[#F4C430] text-sm hover:text-[#D1A33A] hover:underline transition-colors font-medium'
               >
                 {savedPlace.phone}
               </a>
@@ -132,8 +158,8 @@ const SavedPlaceInformation = ({ savedPlace }) => {
         {/* Website */}
         {savedPlace?.website && (
           <div className='flex items-start gap-3'>
-            <div className='w-9 h-9 bg-green-50 rounded-lg flex items-center justify-center shrink-0'>
-              <svg className='w-4 h-4 text-green-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+            <div className='w-9 h-9 bg-[#F4C430]/10 rounded-lg flex items-center justify-center shrink-0'>
+              <svg className='w-4 h-4 text-[#F4C430]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9v-9m0-9v9m0 9c-5 0-9-4-9-9s4-9 9-9' />
               </svg>
             </div>
@@ -143,7 +169,7 @@ const SavedPlaceInformation = ({ savedPlace }) => {
                 href={savedPlace.website} 
                 target='_blank' 
                 rel='noopener noreferrer'
-                className='inline-flex items-center gap-1 text-green-700 text-sm hover:text-green-900 hover:underline transition-colors font-medium'
+                className='inline-flex items-center gap-1 text-[#F4C430] text-sm hover:text-[#D1A33A] hover:underline transition-colors font-medium'
               >
                 <span>Visit Website</span>
                 <svg className='w-3 h-3' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -158,7 +184,7 @@ const SavedPlaceInformation = ({ savedPlace }) => {
       {/* Action Buttons */}
       <div className='flex gap-3 p-5 pt-3'>
         <button 
-          className='flex-1 flex items-center justify-center gap-2 bg-green-700 hover:bg-green-800 text-white font-medium py-2.5 px-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5'
+          className='flex-1 flex items-center justify-center gap-2 bg-[#0A2A60] hover:bg-[#0A2A60]/90 text-white font-medium py-2.5 px-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5'
           onClick={handleShowRoute}
         >
           <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -168,7 +194,7 @@ const SavedPlaceInformation = ({ savedPlace }) => {
         </button>
 
         <button 
-          className='flex-1 flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white font-medium py-2.5 px-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5'
+          className='flex-1 flex items-center justify-center gap-2 bg-[#F4C430] hover:bg-[#D1A33A] text-white font-medium py-2.5 px-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5'
           onClick={handleRemoveFromSaved}
         >
           <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>

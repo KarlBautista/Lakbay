@@ -42,15 +42,21 @@ const SearchBar = () => {
   }, [isLoading])
   
   return (
-    <div className='flex flex-col gap-3'>
-      <input type="text" 
-            className='p-3 border border-gray-300 rounded-sm focus:border-[#D64545] outline-none' 
+    <div className='flex flex-col gap-2 px-4 py-2 rounded-sm bg-white'>
+    
+         <p className='text-[#D64545] font-bold w-full h-[30%] border-b-1 border-gray-300 p-1'>Find a Place</p>
+     
+      <div className='flex gap-3'>
+          <input type="text" 
+            className=' w-[70%] h-[60%] px-3 py-2 border border-gray-300 rounded-lg focus:border-[#D64545] outline-none' 
             placeholder='Search Places'
             onChange={e => setSearch(e.target.value)}
             value={search}
             />
         <button onClick={() => searchPlace()}
-            className='bg-[#D64545] text-white rounded-sm p-2 hover:cursor-pointer'>Search</button>
+            className='bg-red-500 text-white rounded-lg px-3 py-2 hover:cursor-pointer'>Search</button>
+      </div>
+     
     </div>
 
   )

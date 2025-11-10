@@ -71,6 +71,25 @@ const deleteFromFavorites = async (req, res) => {
         return res.status(500).json({ error: err.message });
     }
 }
+const deleteFromSaved = async (req, res) => {
+    const savedPlaceId = req.body.savedPlaceId;
+    try{
+        const { data: deleteFromSavedData, error: deleteFromSavedError } = await supabase.from("saved")
+        .delete().eq("id", savedPlaceId).select();
+
+        if(deleteFromSavedError){
+            console.error("Error Deleting Saved Place: ", deleteFromSavedError.message );
+            return res.status(500).json({ error: deleteFromSavedError.message });
+        }
+            if(deleteFromSavedData){
+                // return deleted row(s) so client can confirm and/or re-fetch
+                return res.status(200).json({ data: deleteFromSavedData });
+            }
+    } catch(err){
+        console.error(`Something went wrong in deleting from saved ${err.message}`);
+        return res.status(500).json({ error: err.message });
+    }
+}
 
 const addToSaved = async (req, res) => {
     const { userId, placeName, address, phone, openingHours, website,
@@ -127,4 +146,4 @@ const getSaved = async (req, res) => {
 
 
 
-module.exports = { getFavorites, addToFavorites, deleteFromFavorites, addToSaved, getSaved } 
+module.exports = { getFavorites, addToFavorites, deleteFromFavorites, addToSaved, getSaved, deleteFromSaved } 

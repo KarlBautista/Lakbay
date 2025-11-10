@@ -71,7 +71,6 @@ const FavoritePlaceInformation = ({ favoritePlace }) => {
     
    
     setFavoriteToShow(placeInfo);
-    
     storeShowRoute(true);
     
     
@@ -82,7 +81,7 @@ const FavoritePlaceInformation = ({ favoritePlace }) => {
     <div className={`bg-white/95 rounded-lg border ${favoriteToShow && favoriteToShow.properties.place_id === favoritePlace.place_id ? "border-red-500" : "border-gray-100" }  w-full shadow-md hover:shadow-lg transition-shadow duration-200`}>
   
       {/* Header */}
-      <div className='bg-gradient-to-r from-red-500 to-red-600 p-5 text-white rounded-t-lg'>
+      <div className='bg-red-500 p-5 text-white rounded-t-lg'>
         <div className='flex items-center gap-3'>
           <div className='w-11 h-11 bg-white/20 rounded-full flex items-center justify-center shrink-0'>
             <svg className='w-6 h-6' fill='currentColor' viewBox='0 0 20 20'>

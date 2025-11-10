@@ -40,14 +40,14 @@ const Categories = () => {
 
 
   return (
-    <div>
+    <div className='w-full h-full bg-white px-4 py-4'>
         <select 
       
           name="selected" 
           id="" 
           value={selected} 
           onChange={(e) => setSelected(e.target.value)}
-          className="w-full h-full  px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#D64545] focus:border-[#D64545] outline-none transition-all duration-200 text-gray-700 cursor-pointer hover:border-gray-400
+          className="w-full h-full  px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-[#D64545] focus:border-[#D64545] outline-none transition-all duration-200 text-gray-700 cursor-pointer hover:border-gray-400
           overflow-y-auto max-h-40"
         >
 

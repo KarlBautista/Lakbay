@@ -98,7 +98,7 @@ const DashBoard = () => {
 
               {/* Saved Icon */}
               <button 
-                className='flex items-center justify-center w-10 h-10 bg-green-500 hover:bg-green-600 rounded-lg transition-colors duration-200 shadow-md'
+                className='flex items-center justify-center w-10 h-10 bg-[#FED141] rounded-lg transition-colors duration-200 shadow-md'
                 title="Saved Places"
                 onClick={() => handleSideBar("savedSideBar")}
               >
@@ -118,13 +118,13 @@ const DashBoard = () => {
                 </svg>
               </button>
             </div>
-        { openSideBar === "searchSideBar" &&
-        <div className='w-full flex-1 flex flex-col gap-3 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100'>
+  { openSideBar === "searchSideBar" &&
+  <div className='w-full flex-1 flex flex-col gap-3 overflow-visible'>
             <div className='shrink-0'>
               <SearchBar />
             </div>
 
-            <div className='shrink-0'>
+            <div className="w-full">
               <Categories />
             </div>
             { isLoading && <div className='w-full h-[50%] flex justify-center items-center shrink-0'>
@@ -132,7 +132,7 @@ const DashBoard = () => {
                 <img src={Loading} alt="loading" className='w-[50px] h-[50px] z-100' />
               </div>}
           { informationOfThePlace &&
-            <div className='shrink-0 overflow-y-auto max-h-[calc(100vh-400px)] scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100'>
+            <div className='shrink-0 max-h-[calc(100vh-400px)]'>
               <PlaceInformation />
             </div> 
           }
@@ -142,15 +142,19 @@ const DashBoard = () => {
 
 
           { openSideBar === "favoritesSideBar" && 
-          <div className='w-full flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100'>
+          <div className='w-full flex-1 overflow-y-auto'>
+            <div className='w-full h-[8%] p-2'>
+              <h2 className='text-2xl font-semibold text-red-500'>Favorite Places</h2>
+            </div>
             <Favorites />
           </div>}
 
           { openSideBar === "savedSideBar" && 
-          <div className='w-full flex-1 overflow-y-auto overflow-x-hidden scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100'>
-            <div className='p-4 text-center text-gray-600'>
-              <SavedPlaces />
+          <div className='w-full flex-1 overflow-y-auto'>
+           <div className='w-full h-[8%] p-2'>
+              <h2 className='text-2xl font-semibold text-[#FED141]'>Saved Places</h2>
             </div>
+            <SavedPlaces />
           </div>}
          </div> 
       
