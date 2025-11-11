@@ -17,6 +17,7 @@ function Map() {
     const lastLocationRequestRef = useRef(0);
     const isLocationRequestingRef = useRef(false);
     const restartTimeoutRef = useRef(null);
+    const autoCenterRef = useRef(true);
     const { pointOfPlaces, storeInformationOfThePlace, storeUserLocation, shouldShowRoute, informationOfThePlace, 
       storeShowRoute, mapState, saveMapState, routeState, setRouteState, clearRouteState, setFavoriteToShow, favoriteToShow } = useMap(); 
     const philippineBounds = L.latLngBounds(
@@ -32,6 +33,10 @@ function Map() {
             center: initialCenter,
             zoom: initialZoom
         }).setMaxBounds(philippineBounds);
+
+        mapRef.current.on('movestart', () => {
+          autoCenterRef.current = false;
+        })
         
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             maxZoom: 19,
@@ -271,11 +276,17 @@ function Map() {
             duration: 1.5,
           });
         }).addTo(mapRef.current);
-    
-        mapRef.current.setView([lat, lng], 15);
+        
+        if(autoCenterRef.current){
+          mapRef.current.setView([lat, lng], 15);
+        }
+     
       } else {
         userMarkerRef.current.setLatLng([lat, lng]);
-        mapRef.current.panTo([lat, lng]);
+        if(autoCenterRef.current){
+          mapRef.current.panTo([lat, lng]);
+        }
+      
       }
     }
   }
@@ -400,7 +411,7 @@ function Map() {
     <div className="relative w-full h-full">
       <div id="map" className="w-full h-[99%] z-0" />
       <button className="absolute bottom-10 md:bottom-20 md:right-15 right-5 z-10 p-5 rounded-full bg-white cursor-pointer
-        hover:border" title="Get my location" onClick={() => getLocation()}>
+        hover:border" title="Get my location" onClick={() => { autoCenterRef.current = true; getLocation();}}>
         <img src={gpsIcon} alt="" className="w-7 h-7 md:w-15 md:h-15"/>
       </button>
     </div>
