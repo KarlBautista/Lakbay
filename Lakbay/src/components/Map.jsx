@@ -35,7 +35,7 @@ function Map() {
         
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             maxZoom: 19,
-            minZoom: 8,
+            minZoom: 7,
         }).addTo(mapRef.current);
    
         mapRef.current.on('moveend zoomend', () => {
