@@ -6,7 +6,16 @@ import gpsIcon from "../assets/gps.png"
 import "leaflet-routing-machine"
 import "leaflet-rotatedmarker"
 import Swal from "sweetalert2"; 
+import iconUrl from "leaflet/dist/images/marker-icon.png"
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
+import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
 import Lakbay from "../assets/LakbayPH.png"
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+});
 function Map() {
     const mapRef = useRef(null);
     const pointOfPlacesMarker = useRef([]);
