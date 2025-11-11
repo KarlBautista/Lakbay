@@ -50,7 +50,7 @@ const DashBoard = () => {
     <div className='min-h-full h-full w-full flex flex-col md:flex-row-reverse'>
       
       {/* Map Section */}
-     <div className='flex-1 w-full md:w-[80%] h-[30vh] md:h-[89.5vh] md:min-h-[400px] bg-[#D64545] flex items-center justify-center backdrop-blur-md shadow-lg border border-white/20'>
+     <div className='flex-1 w-full md:w-[80%] min-h-[300px] md:h-[89.5vh] md:min-h-[400px] bg-[#D64545] flex items-center justify-center backdrop-blur-md shadow-lg border border-white/20'>
 
         <Map />
       </div>
