@@ -50,20 +50,19 @@ const DashBoard = () => {
     <div className='min-h-full h-full w-full flex flex-col md:flex-row-reverse'>
       
       {/* Map Section */}
-      <div className='flex-1 min-h-[400px] bg-[#D64545] flex items-center justify-center backdrop-blur-md shadow-lg border border-white/20'>
+     <div className='flex-1 w-full md:w-[80%] h-[30vh] md:h-[89.5vh] md:min-h-[400px] bg-[#D64545] flex items-center justify-center backdrop-blur-md shadow-lg border border-white/20'>
+
         <Map />
       </div>
 
       {/* Sidebar Section */}
-      <div className='flex flex-col bg-[#F0F6FF] px-5 py-5 gap-5
-                      md:w-[30%] lg:w-[30%] xl:w-[20%] overflow-y-auto
-                      border-r-5 border-r-[#FFDA3E] border-b-5 border-b-[#FFDA3E] md:overflow-hidden'>
+      <div className='flex flex-col bg-[#F0F6FF] px-5 py-5 gap-5 w-full md:w-[40%] lg:w-[30%] xl:w-[20%] overflow-y-auto border-r-5 border-r-[#FFDA3E] border-b-5 border-b-[#FFDA3E] md:overflow-hidden'>
         
         {/* Top Action Icons */}
         <div className='flex justify-center items-center gap-4 pb-3 border-b border-gray-300'>
           {/* Search Icon */}
           <button 
-            className='flex items-center justify-center w-10 h-10 bg-blue-500 hover:bg-blue-600 rounded-lg transition-colors duration-200 shadow-md'
+            className='flex items-center justify-center w-12 h-12 md:w-10 md:h-10 bg-blue-500 hover:bg-blue-600 rounded-lg transition-colors duration-200 shadow-md'
             title="Search Places"
             onClick={() => handleSideBar("searchSideBar")}
           >
@@ -85,7 +84,7 @@ const DashBoard = () => {
 
           {/* Favorites Icon */}
           <button 
-            className='flex items-center justify-center w-10 h-10 bg-red-500 hover:bg-red-600 rounded-lg transition-colors duration-200 shadow-md'
+            className='flex items-center justify-center w-12 h-12 md:w-10 md:h-10 bg-red-500 hover:bg-red-600 rounded-lg transition-colors duration-200 shadow-md'
             title="Favorites"
             onClick={() => handleSideBar("favoritesSideBar")}
           >
@@ -105,7 +104,7 @@ const DashBoard = () => {
 
           {/* Saved Icon */}
           <button 
-            className='flex items-center justify-center w-10 h-10 bg-[#FED141] rounded-lg transition-colors duration-200 shadow-md'
+            className='flex items-center justify-center w-12 h-12 md:w-10 md:h-10 bg-[#FED141] rounded-lg transition-colors duration-200 shadow-md'
             title="Saved Places"
             onClick={() => handleSideBar("savedSideBar")}
           >
