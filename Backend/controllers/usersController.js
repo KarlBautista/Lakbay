@@ -82,7 +82,6 @@ const deleteFromSaved = async (req, res) => {
             return res.status(500).json({ error: deleteFromSavedError.message });
         }
             if(deleteFromSavedData){
-                // return deleted row(s) so client can confirm and/or re-fetch
                 return res.status(200).json({ data: deleteFromSavedData });
             }
     } catch(err){

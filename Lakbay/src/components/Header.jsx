@@ -33,8 +33,6 @@ const Header = () => {
     try {
       const result = await signOut();
       console.log('signOut result:', result);
-
-      // Normal flow: store returns { success: true } or { success: false, error }
       if (result && result.success) {
         navigate("/");
         Swal.fire({
@@ -48,7 +46,6 @@ const Header = () => {
         return;
       }
 
-      // If the result explicitly indicates failure, show the error
       if (result && result.success === false) {
         Swal.fire({
           title: "Something went wrong",
@@ -61,7 +58,6 @@ const Header = () => {
         return;
       }
 
-      // Fallback: some code paths might return undefined/null — force local sign-out
       console.warn('signOut returned no explicit result, performing local sign-out fallback');
       setAuthenticatedUser(null);
       navigate('/');
@@ -95,9 +91,9 @@ const Header = () => {
     '>
       <div className='flex items-center h-full md:w-[20%] sm:w-[30%] w-[70%] md:justify-center '>
         <div className='w-[40%] h-full md:w-[30%]'>
-            <img src={Lakbay} alt="LakbayPH Logo" className='w-full h-full' />
+           <Link to={"/"}><img src={Lakbay} alt="LakbayPH Logo" className='w-full h-full' /></Link>
         </div>
-          <h1 className='text-2xl text-white font-semibold'>LakbayPH</h1>
+          <Link to="/" className='text-2xl text-white font-semibold'>LakbayPH</Link>
       </div>
      
 
@@ -118,14 +114,14 @@ const Header = () => {
           </svg>
         </Link>
         
-        {/* User Icon Dropdown */}
+
         <div className='relative' ref={dropdownRef}>
           <button 
             onClick={toggleDropdown}
             className='flex items-center justify-center w-10 h-10 bg-white/20 rounded-full hover:bg-white/30 transition-colors duration-200 cursor-pointer'
             title="User Menu"
           >
-            {/* User Icon SVG */}
+  
             <svg 
               className="w-6 h-6 text-white" 
               fill="currentColor" 

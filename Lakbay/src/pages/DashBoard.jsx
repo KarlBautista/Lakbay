@@ -137,13 +137,16 @@ const DashBoard = () => {
               <Categories />
             </div>
 
-            {isLoading && (
-              <div className='w-full h-[50%] flex justify-center items-center shrink-0'>
-                <img src={Loading} alt="loading" className='w-[50px] h-[50px] z-100' />
-              </div>
-            )}
-
-            {informationOfThePlace && (
+       {isLoading && (
+          <div className="fixed inset-0 bg-[rgba(0,0,0,0.2)] bg-opacity-20 flex justify-center items-center z-50">
+            <img
+          src={Loading} 
+          alt="loading"
+          className="w-[50px] h-[50px]"
+          style={{ filter: 'invert(31%) sepia(97%) saturate(7471%) hue-rotate(206deg) brightness(92%) contrast(97%)' }}/>
+          </div>
+        )}
+        {informationOfThePlace && (
               <div className='shrink-0 max-h-[calc(100vh-400px)] overflow-y-auto'>
                 <PlaceInformation />
               </div> 

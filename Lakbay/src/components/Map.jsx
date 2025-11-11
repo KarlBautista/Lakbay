@@ -25,7 +25,6 @@ function Map() {
     )
     
     useEffect(() => {
-        // Initialize map with saved state or defaults
         const initialCenter = mapState.initialized ? mapState.center : [12.8797, 121.7740];
         const initialZoom = mapState.initialized ? mapState.zoom : 6;
         
@@ -39,7 +38,6 @@ function Map() {
             minZoom: 8,
         }).addTo(mapRef.current);
    
-        // Save map state on move and zoom events
         mapRef.current.on('moveend zoomend', () => {
             if (mapRef.current) {
                 const center = mapRef.current.getCenter();
@@ -47,19 +45,15 @@ function Map() {
                 saveMapState([center.lat, center.lng], zoom);
             }
         });
-        
-        // Start location tracking after map is ready
-        // Only use watchLocation initially - it will call show() when location is found
+      
         watchLocation();
-        
-        // Restore route if one was active before navigation
+      
         if (routeState.isActive && routeState.userLocation && routeState.destination) {
             setTimeout(() => {
                 restoreRoute();
-            }, 1000); // Wait a bit for map to be fully ready
+            }, 1000); 
         }
         
-        // Debounced restart function to prevent multiple rapid calls
         const debouncedRestart = () => {
             if (restartTimeoutRef.current) {
                 clearTimeout(restartTimeoutRef.current);
@@ -70,10 +64,9 @@ function Map() {
                     console.log("Debounced restart of location tracking");
                     watchLocation();
                 }
-            }, 2000); // Wait 2 seconds before restarting
+            }, 2000);
         };
         
-        // Handle page visibility changes - restart geolocation when page becomes visible
         const handleVisibilityChange = () => {
             if (!document.hidden && mapRef.current) {
                 console.log("Page became visible");
@@ -81,7 +74,6 @@ function Map() {
             }
         };
         
-        // Handle window focus - restart geolocation when window gains focus
         const handleWindowFocus = () => {
             if (mapRef.current && document.hasFocus()) {
                 console.log("Window gained focus");
@@ -93,28 +85,27 @@ function Map() {
         window.addEventListener('focus', handleWindowFocus);
          
         return () => {
-            // Remove event listeners
             document.removeEventListener('visibilitychange', handleVisibilityChange);
             window.removeEventListener('focus', handleWindowFocus);
             
-            // Clean up timeouts
+       
             if (restartTimeoutRef.current) {
                 clearTimeout(restartTimeoutRef.current);
             }
             
-            // Clean up geolocation watcher
+        
             if (watchIdRef.current !== null) {
                 navigator.geolocation.clearWatch(watchIdRef.current);
                 watchIdRef.current = null;
             }
             
-            // Clean up route control
+     
             if (routeControlRef.current && mapRef.current) {
                 mapRef.current.removeControl(routeControlRef.current);
                 routeControlRef.current = null;
             }
             
-            // Save final state before cleanup
+       
             if (mapRef.current) {
                 const center = mapRef.current.getCenter();
                 const zoom = mapRef.current.getZoom();
@@ -193,8 +184,6 @@ function Map() {
     })
   }
 
-
-
   }, [pointOfPlaces]);
 
   
@@ -231,13 +220,8 @@ function Map() {
     });
   }
   const getLocation = () => {
-    const now = Date.now();
-    if (now - lastLocationRequestRef.current < 3000) {
-      console.log("Location request throttled, too soon since last request");
-      return;
-    }
+
     
-    // Prevent multiple simultaneous requests
     if (isLocationRequestingRef.current) {
       console.log("Location request already in progress");
       return;
@@ -249,7 +233,6 @@ function Map() {
       return;
     }
     
-    lastLocationRequestRef.current = now;
     isLocationRequestingRef.current = true;
     
     navigator.geolocation.getCurrentPosition(
@@ -263,8 +246,8 @@ function Map() {
       }, 
       {
         enableHighAccuracy: true,
-        maximumAge: 5000, // Allow cached location up to 5 seconds old
-        timeout: 15000 // Increase timeout
+        maximumAge: 5000, 
+        timeout: 15000 
       }
     );
   }
@@ -277,9 +260,7 @@ function Map() {
     userLocationRef.current = [lat, lng];
     
     if(mapRef.current){
-      // Check if marker exists and is still on the map
       if(!userMarkerRef.current || !mapRef.current.hasLayer(userMarkerRef.current)){
-        // Create new marker
         userMarkerRef.current = L.marker([lat, lng]).bindTooltip("You are here!", {
           permanent: true,
           direction: "top",
@@ -290,11 +271,9 @@ function Map() {
             duration: 1.5,
           });
         }).addTo(mapRef.current);
-        
-        // Set view to user location only when creating new marker
+    
         mapRef.current.setView([lat, lng], 15);
       } else {
-        // Update existing marker position
         userMarkerRef.current.setLatLng([lat, lng]);
         mapRef.current.panTo([lat, lng]);
       }
@@ -302,7 +281,6 @@ function Map() {
   }
 
   const error = (error) => {
-    // Don't log timeout errors if they happen repeatedly (browser throttling)
     if (error.code === error.TIMEOUT) {
       console.warn("Geolocation timeout - this is normal when switching tabs/windows");
       return;
@@ -321,12 +299,12 @@ function Map() {
     }
   }
 
-  // Handle route showing for search results (informationOfThePlace)
+
   useEffect(() => {
     if (!shouldShowRoute) return; 
     if (!informationOfThePlace) return;
     
-    // Clear favoriteToShow when showing route for search result
+  
     setFavoriteToShow(null);
     
     console.log("Showing route for search result:", informationOfThePlace.properties?.name);
@@ -334,7 +312,7 @@ function Map() {
   
   }, [informationOfThePlace, shouldShowRoute]);
 
-  // Handle route showing for favorites (favoriteToShow)
+
   useEffect(() => {
     if (!shouldShowRoute) return;
     if (!favoriteToShow) return;
@@ -352,7 +330,7 @@ function Map() {
       mapRef.current.removeControl(routeControlRef.current);
     }
 
-    // Create new route control
+
     routeControlRef.current = L.Routing.control({
       waypoints: [
         L.latLng(userLat, userLng),
@@ -374,13 +352,16 @@ function Map() {
     }).addTo(mapRef.current);
     
 
-    // Store route state for persistence
+
     setRouteState(
       true, 
       [userLat, userLng], 
       [destinationLat, destionationlng],
       [[userLat, userLng], [destinationLat, destionationlng]]
     );
+
+    routeControlRef.current.getContainer().style.display = "none";
+
   }
 
   const restoreRoute = () => {
@@ -388,14 +369,13 @@ function Map() {
     
     console.log("Restoring route...");
     
-    // Remove existing route if any
+
     if(routeControlRef.current){
       mapRef.current.removeControl(routeControlRef.current);
     }
 
     const [start, end] = routeState.waypoints;
-    
-    // Recreate the route control
+
     routeControlRef.current = L.Routing.control({
       waypoints: [
         L.latLng(start[0], start[1]),
