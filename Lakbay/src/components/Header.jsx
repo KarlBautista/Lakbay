@@ -154,16 +154,7 @@ const Header = () => {
                    
                   
                   </div>
-                  <Link 
-                    to="/profile" 
-                    className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150'
-                    onClick={() => setIsDropdownOpen(false)}
-                  >
-                    <svg className="inline w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"/>
-                    </svg>
-                    Profile
-                  </Link>
+                  
                   <button 
                     onClick={signOutUser}
                     className='w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition-colors duration-150'
