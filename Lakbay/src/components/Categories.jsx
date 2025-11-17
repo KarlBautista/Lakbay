@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query';
 import useMap from './LakbayZustand';
 import Swal from "sweetalert2"
+import Lakbay from "../assets/LakbayPH.png"
 const Categories = () => {
   const [selected, setSelected] = useState("");
   const geoapifyAPI = import.meta.env.VITE_GEOAPIFY_API_KEY;
@@ -21,9 +22,16 @@ const Categories = () => {
 
   
 
-  if(error){
-    throw new Error("Error fetching data: ", error);
-  }
+   if(error){
+     Swal.fire({
+       title: `Sorry, No point of place found in "${selected}"`,
+       text: "try searching other places",
+       imageUrl: Lakbay,
+       imageHeight: '120px',
+       imageWidth: '120px',
+     });
+     console.error(`Error fetching data: ${error.statusText}`);
+   }
 
   useEffect(() => {
     if(data){
