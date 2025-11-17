@@ -8,7 +8,7 @@ const useUserData = create((set) => ({
     setSaved: (savedValue) => set({ saved: savedValue }),
     addToSaved: async (savedValue) => {
         try{
-            const response = await axios.post("http://localhost:3000/api/add-to-saved", {
+            const response = await axios.post("https://lakbayph.onrender.com/api/add-to-saved", {
                 savedValue
             })
             if(response.error){
@@ -17,12 +17,12 @@ const useUserData = create((set) => ({
             }
             if(response.data){
                 console.log(`Added to saved:`, response.data);
-                // Refresh saved after adding
-                const updatedSaved = await axios.post("http://localhost:3000/api/get-saved", {
+               
+                const updatedSaved = await axios.post("https://lakbayph.onrender.com/api/get-saved", {
                     userId: savedValue.userId
                 });
                 if(updatedSaved.data){
-                    // API returns payload under `data.data` (see getSaved implementation)
+                
                     set({ saved: updatedSaved.data.data || [] });
                 }
                 return { success: true };
@@ -34,7 +34,7 @@ const useUserData = create((set) => ({
     },
     getSaved: async (userId) => {
         try {
-            const response = await axios.post("http://localhost:3000/api/get-saved", {
+            const response = await axios.post("https://lakbayph.onrender.com/api/get-saved", {
                 userId
             });
             if(response.error){
@@ -52,7 +52,7 @@ const useUserData = create((set) => ({
     },
     getFavorites: async (userId) => {
         try{
-            const response = await axios.post("http://localhost:3000/api/get-favorites", {
+            const response = await axios.post("https://lakbayph.onrender.com/api/get-favorites", {
                 userId
             });
             if(response.error){
@@ -68,7 +68,7 @@ const useUserData = create((set) => ({
     },
     addToFavorites: async (favoritesValue) => {
         try{
-            const response = await axios.post("http://localhost:3000/api/add-to-favorites", {
+            const response = await axios.post("https://lakbayph.onrender.com/api/add-to-favorites", {
                 favoritesValue
             });
             if(response.error){
@@ -78,7 +78,7 @@ const useUserData = create((set) => ({
             if(response.data){
                 console.log(`Added to favorites:`, response.data);
                 // Refresh favorites after adding
-                const updatedFavorites = await axios.post("http://localhost:3000/api/get-favorites", {
+                const updatedFavorites = await axios.post("https://lakbayph.onrender.com/api/get-favorites", {
                     userId: favoritesValue.userId
                 });
                 if(updatedFavorites.data){
@@ -93,7 +93,7 @@ const useUserData = create((set) => ({
     },
     deleteFromSaved: async (savedPlaceId, userId) => {
         try{
-            const response = await axios.delete("http://localhost:3000/api/delete-from-saved", {
+            const response = await axios.delete("https://lakbayph.onrender.com/api/delete-from-saved", {
                 data: { savedPlaceId }
             });
             if(response.error){
@@ -101,7 +101,7 @@ const useUserData = create((set) => ({
                 return { success: false, error: response.error };
             }
             if(response.data){
-                const updatedSaved = await axios.post("http://localhost:3000/api/get-saved", {
+                const updatedSaved = await axios.post("https://lakbayph.onrender.com/api/get-saved", {
                     userId: userId
                 });
                 if(updatedSaved.data){
@@ -116,7 +116,7 @@ const useUserData = create((set) => ({
     },
     deleteFromFavorites: async (favoritePlaceId, userId) => {
         try{
-            const response = await axios.delete("http://localhost:3000/api/delete-from-favorites", {
+            const response = await axios.delete("https://lakbayph.onrender.com/api/delete-from-favorites", {
                 data: { favoritePlaceId }
             });
             if(response.error){
@@ -126,7 +126,7 @@ const useUserData = create((set) => ({
             if(response.data){
                 console.log("Deleted from favorites: ", response.data);
                 // Refresh favorites after deleting
-                const updatedFavorites = await axios.post("http://localhost:3000/api/get-favorites", {
+                const updatedFavorites = await axios.post("https://lakbayph.onrender.com/api/get-favorites", {
                     userId: userId
                 });
                 if(updatedFavorites.data){
