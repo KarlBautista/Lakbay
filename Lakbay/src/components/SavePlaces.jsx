@@ -3,7 +3,7 @@ import SavedPlaceInformation from "./SavedPlaceInformation"
 import useUserData from './LakbayUsersData'
 const SavePlaces = () => {
   const { saved } = useUserData();
-  console.log("ito mga saved ko", saved);
+
   return (
     <div className='w-full h-full flex flex-col gap-5'>
       {saved && saved.length > 0 ? (

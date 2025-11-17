@@ -184,7 +184,6 @@ function Map() {
    
   }
   if(pointOfPlaces && pointOfPlaces.length === 0){
-    console.log("walang nahanap")
     Swal.fire({
       imageUrl: Lakbay,
       imageHeight: "150px",

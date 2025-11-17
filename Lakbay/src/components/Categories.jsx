@@ -59,59 +59,22 @@ const Categories = () => {
           overflow-y-auto max-h-40"
         >
 
+         <option value="commercial">Commercial</option>
+        <option value="commercial.department_store">Department Store</option>
+        <option value="commercial.shopping_mall">Shopping Mall</option>
+        <option value="commercial.marketplace">Marketplace</option>
+        <option value="commercial.supermarket">Supermarket / Grocery</option>
+        <option value="commercial.convenience">Convenience Store</option>
+        <option value="commercial.electronics">Electronics</option>
+        <option value="commercial.books">Book Store</option>
+        <option value="commercial.gift_and_souvenir">Gift & Souvenir</option>
+        <option value="commercial.clothing">Clothing Store</option>
+        <option value="commercial.furniture">Furniture Store</option>
+        <option value="commercial.health_and_beauty">Health & Beauty</option>
+        <option value="commercial.jewelry">Jewelry</option>
+        <option value="commercial.pet">Pet Store</option>
+        <option value="commercial.toys">Toys & Games</option>
 
-          <option value="">Select Category of Places</option>
-           <option value="commercial">Commercial</option>
-          <option value="commercial.department_store">Department Store</option>
-          <option value="commercial.shopping_mall">Shopping Mall</option>
-          <option value="commercial.marketplace">Marketplace</option>
-          <option value="commercial.supermarket">Supermarket / Grocery</option>
-          <option value="commercial.convenience">Convenience Store</option>
-          <option value="commercial.greengrocer">Greengrocer / Fresh Market</option>
-          <option value="commercial.bakery">Bakery</option>
-          <option value="commercial.beverages">Beverages Store</option>
-          <option value="commercial.toys">Toys Store</option>
-          <option value="commercial.books">Bookstore</option>
-          <option value="commercial.electronics">Electronics</option>
-          <option value="commercial.mobile_phone">Mobile Phone Shop</option>
-          <option value="commercial.fashion">Clothing / Fashion</option>
-          <option value="commercial.shoes">Shoes Store</option>
-          <option value="commercial.sports">Sports Store</option>
-          <option value="commercial.outdoor_and_sport">Outdoor & Sport</option>
-          <option value="commercial.vehicle">Vehicle Store / Car Dealer</option>
-          <option value="commercial.motorcycle">Motorcycle Store</option>
-          <option value="commercial.furniture">Furniture Store</option>
-          <option value="commercial.hardware">Hardware / Home Improvement</option>
-          <option value="commercial.jewelry">Jewelry Store</option>
-          <option value="commercial.cosmetics">Cosmetics / Beauty</option>
-          <option value="commercial.gift_and_souvenir">Gift & Souvenirs</option> 
-          <option value="commercial.bank">Bank</option>
-          <option value="commercial.money_transfer">Money Transfer</option>
-          <option value="commercial.post_office">Post Office</option>
-          <option value="commercial.kiosk">Kiosk</option>
-
-          <option value="catering.restaurant">Restaurant</option>
-          <option value="catering.fast_food">Fast Food</option>
-          <option value="catering.cafe">Cafe</option>
-          <option value="catering.bar">Bar</option>
-          <option value="catering.pub">Pub</option>
-          <option value="catering.kiosk">Food Kiosk</option>
-          <option value="catering.food_court">Food Court</option>
-          <option value="catering.ice_cream">Ice Cream Shop</option>
-          <option value="catering.bakery">Bakery</option>
-          <option value="catering.vegan">Vegan Restaurant</option>
-          <option value="catering.localized">Local Specialty Restaurant</option>
-          <option value="catering.diner">Diner</option>
-
-          <option value="accommodation.hotel">Hotel</option>
-          <option value="accommodation.motel">Motel</option>
-          <option value="accommodation.hostel">Hostel</option>
-          <option value="accommodation.guest_house">Guest House</option>
-          <option value="accommodation.resort">Resort</option>
-          <option value="accommodation.bed_and_breakfast">Bed & Breakfast</option>
-          <option value="accommodation.camp_site">Camp Site</option>
-          <option value="accommodation.chalet">Chalet / Cabins</option>
-          <option value="accommodation.apartments">Serviced Apartments</option>
         </select>
     </div>
   )
