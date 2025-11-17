@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import useMap from './LakbayZustand';
+import Swal from 'sweetalert2';
+import Lakbay from "../assets/LakbayPH.png"
 const SearchBar = () => {
   const geoapifyAPI = import.meta.env.VITE_GEOAPIFY_API_KEY;
   const [search, setSearch] = useState("");
@@ -25,7 +27,14 @@ const SearchBar = () => {
   }
 
   if(error){
-    throw new Error("Error fetching data: ", error);
+    Swal.fire({
+      title: `Sorry, No point of place found in "${search}"`,
+      text: "try searching other places",
+      imageUrl: Lakbay,
+      imageHeight: '120px',
+      imageWidth: '120px',
+    });
+    console.error(`Error fetching data: ${error.statusText}`);
   }
 
   useEffect(() => {

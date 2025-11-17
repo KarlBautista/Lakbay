@@ -10,7 +10,7 @@ const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
 
-  // Close dropdown when clicking outside
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -29,7 +29,7 @@ const Header = () => {
   };
 
   const signOutUser = async () => {
-    setIsDropdownOpen(false); // Close dropdown when signing out
+    setIsDropdownOpen(false);
     try {
       const result = await signOut();
       console.log('signOut result:', result);
@@ -85,7 +85,7 @@ const Header = () => {
 
   }
 
-   console.log(authenticatedUser);
+  
   return (
     <div className='w-full h-[100px] px-3 bg-[#0A2A60] flex items-center  shadow-2xl border-b-4 border-[#FFDA3E]  relative z-50 justify-between md:justify-evenly
     '>
@@ -103,7 +103,7 @@ const Header = () => {
           className='flex items-center justify-center w-10 h-10 bg-white/10 rounded-lg hover:bg-white/20 transition-colors duration-200 hidden md:flex'
           title="Dashboard"
         >
-          {/* Dashboard Icon SVG */}
+         
           <svg 
             className="w-6 h-6 text-white" 
             fill="currentColor" 
@@ -136,11 +136,11 @@ const Header = () => {
             </svg>
           </button>
 
-          {/* Dropdown Menu */}
+    
           {isDropdownOpen && (
             <div className='absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-2 z-50 animate-in slide-in-from-top-2 duration-200'>
               {authenticatedUser !== null ? (
-                // Authenticated User Menu
+             
                 <>
                   <div className='px-4 py-2 text-sm text-gray-500 border-b border-gray-100'>
                     Signed in as <br />
@@ -175,7 +175,7 @@ const Header = () => {
                   </button>
                 </>
               ) : (
-                // Non-authenticated User Menu
+               
                 <>
                   <div className='px-4 py-2 text-sm text-gray-500 border-b border-gray-100'>
                     Welcome to LakbayPH

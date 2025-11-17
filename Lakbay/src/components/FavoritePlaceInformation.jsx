@@ -54,7 +54,7 @@ const FavoritePlaceInformation = ({ favoritePlace }) => {
   };
 
   const handleShowRoute = () => {
-    // Convert favorite place data to information format and show route
+ 
     const placeInfo = {
       properties: {
         name: favoritePlace.place_name,
@@ -80,7 +80,7 @@ const FavoritePlaceInformation = ({ favoritePlace }) => {
     
     <div className={`bg-white/95 rounded-lg border ${favoriteToShow && favoriteToShow.properties.place_id === favoritePlace.place_id ? "border-red-500" : "border-gray-100" }  w-full shadow-md hover:shadow-lg transition-shadow duration-200`}>
   
-      {/* Header */}
+ 
       <div className='bg-red-500 p-5 text-white rounded-t-lg'>
         <div className='flex items-center gap-3'>
           <div className='w-11 h-11 bg-white/20 rounded-full flex items-center justify-center shrink-0'>
@@ -97,9 +97,9 @@ const FavoritePlaceInformation = ({ favoritePlace }) => {
         </div>
       </div>
 
-      {/* Content */}
+
       <div className='p-5 space-y-4'>
-        {/* Address */}
+   
         <div className='flex items-start gap-3'>
           <div className='w-9 h-9 bg-red-50 rounded-lg flex items-center justify-center shrink-0'>
             <svg className='w-4 h-4 text-red-500' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -117,7 +117,7 @@ const FavoritePlaceInformation = ({ favoritePlace }) => {
           </div>
         </div>
 
-        {/* Opening Hours */}
+   
         {favoritePlace?.opening_hours && (
           <div className='flex items-start gap-3'>
             <div className='w-9 h-9 bg-green-50 rounded-lg flex items-center justify-center shrink-0'>
@@ -132,7 +132,7 @@ const FavoritePlaceInformation = ({ favoritePlace }) => {
           </div>
         )}
 
-        {/* Phone */}
+  
         {favoritePlace?.phone && (
           <div className='flex items-start gap-3'>
             <div className='w-9 h-9 bg-blue-50 rounded-lg flex items-center justify-center shrink-0'>
@@ -152,7 +152,6 @@ const FavoritePlaceInformation = ({ favoritePlace }) => {
           </div>
         )}
 
-        {/* Website */}
         {favoritePlace?.website && (
           <div className='flex items-start gap-3'>
             <div className='w-9 h-9 bg-purple-50 rounded-lg flex items-center justify-center shrink-0'>
@@ -178,9 +177,9 @@ const FavoritePlaceInformation = ({ favoritePlace }) => {
         )}
       </div>
 
-      {/* Action Buttons */}
+
       <div className='flex gap-3 p-5 pt-3'>
-        {/* Show Route Button */}
+  
         <button 
           className='flex-1 flex items-center justify-center gap-2 bg-[#0A2A60] hover:bg-[#0A2A60]/90 text-white font-medium py-2.5 px-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5'
           onClick={handleShowRoute}
@@ -191,7 +190,6 @@ const FavoritePlaceInformation = ({ favoritePlace }) => {
           <span className='text-sm'>Show Route</span>
         </button>
 
-        {/* Remove from Favorites Button */}
         <button 
           className='flex-1 flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white font-medium py-2.5 px-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5'
           onClick={handleRemoveFromFavorites}

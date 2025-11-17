@@ -99,7 +99,7 @@ const PlaceInformation = () => {
     <div className="bg-white/95 rounded-lg border border-gray-100 w-full min-h-[10vh] max-h-[55vh] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-all duration-200">
 
       
-      {/* Header */}
+  
       <div className="bg-red-500 p-6 text-white sticky top-0 z-10">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center shrink-0">
@@ -114,9 +114,9 @@ const PlaceInformation = () => {
         </div>
       </div>
 
-      {/* Content */}
+      
       <div className="p-6 space-y-6">
-        {/* Address */}
+        
         <div className="flex items-start gap-4">
           <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center shrink-0">
             <svg className="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -130,7 +130,7 @@ const PlaceInformation = () => {
           </div>
         </div>
 
-        {/* Opening Hours */}
+    
         <div className="flex items-start gap-4">
           <div className="w-10 h-10 bg-green-50 rounded-xl flex items-center justify-center shrink-0">
             <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -143,7 +143,7 @@ const PlaceInformation = () => {
           </div>
         </div>
 
-        {/* Phone */}
+     
         <div className="flex items-start gap-4">
           <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center shrink-0">
             <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -156,7 +156,7 @@ const PlaceInformation = () => {
           </div>
         </div>
 
-        {/* Website */}
+     
         <div className="flex items-start gap-4">
           <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center shrink-0">
             <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,7 +169,7 @@ const PlaceInformation = () => {
           </div>
         </div>
 
-        {/* Buttons (Inside Scrollable Div) */}
+      
         <div className="pt-4 border-t border-gray-200 space-y-3">
           <button
             className="w-full bg-[#0A2A60] hover:bg-[#0A2A60]/90 text-white font-medium py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2 text-sm"

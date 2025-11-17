@@ -32,7 +32,7 @@ const useMap = create((set) => ({
         }
     })),
     mapState: {
-        center: [12.8797, 121.7740], // Default Philippines center
+        center: [12.8797, 121.7740],
         zoom: 6,
         initialized: false
     },
